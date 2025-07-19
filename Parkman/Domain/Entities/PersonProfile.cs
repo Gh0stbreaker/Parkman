@@ -1,6 +1,6 @@
 using System;
 
-namespace Parkman.Domain;
+namespace Parkman.Domain.Entities;
 
 public class PersonProfile
 {

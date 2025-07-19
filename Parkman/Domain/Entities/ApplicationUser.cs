@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Identity;
 
-namespace Parkman.Domain;
+namespace Parkman.Domain.Entities;
 
 public class ApplicationUser : IdentityUser
 {

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Parkman.Domain;
+using Parkman.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

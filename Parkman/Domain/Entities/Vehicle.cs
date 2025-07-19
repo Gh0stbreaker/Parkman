@@ -1,6 +1,8 @@
 using System;
 
-namespace Parkman.Domain;
+using Parkman.Domain.Enums;
+
+namespace Parkman.Domain.Entities;
 
 public class Vehicle
 {

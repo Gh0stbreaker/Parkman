@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Parkman.Domain;
+using Parkman.Domain.Entities;
+
+namespace Parkman.Infrastructure;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
