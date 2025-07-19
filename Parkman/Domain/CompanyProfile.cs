@@ -15,6 +15,8 @@ public class CompanyProfile
     public string PhoneNumber { get; private set; } = string.Empty;
     public string BillingAddress { get; private set; } = string.Empty;
 
+    public List<Vehicle> Vehicles { get; } = new();
+
     private CompanyProfile() { }
 
     public CompanyProfile(
@@ -60,6 +62,13 @@ public class CompanyProfile
         ContactEmail = contactEmail;
         PhoneNumber = phoneNumber;
         BillingAddress = billingAddress;
+    }
+
+    internal void AddVehicle(Vehicle vehicle)
+    {
+        if (vehicle == null) throw new ArgumentNullException(nameof(vehicle));
+        Vehicles.Add(vehicle);
+        vehicle.SetCompanyProfile(this);
     }
 
     internal void SetUser(ApplicationUser user)

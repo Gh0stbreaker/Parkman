@@ -13,6 +13,8 @@ public class PersonProfile
     public string PhoneNumber { get; private set; } = string.Empty;
     public string Address { get; private set; } = string.Empty;
 
+    public Vehicle? Vehicle { get; private set; }
+
     private PersonProfile() { }
 
     public PersonProfile(
@@ -46,6 +48,17 @@ public class PersonProfile
         DateOfBirth = dateOfBirth;
         PhoneNumber = phoneNumber;
         Address = address;
+    }
+
+    internal void SetVehicle(Vehicle vehicle)
+    {
+        if (vehicle == null) throw new ArgumentNullException(nameof(vehicle));
+        if (Vehicle != null)
+        {
+            throw new InvalidOperationException("Person profile already has a vehicle.");
+        }
+        Vehicle = vehicle;
+        vehicle.SetPersonProfile(this);
     }
 
     internal void SetUser(ApplicationUser user)
