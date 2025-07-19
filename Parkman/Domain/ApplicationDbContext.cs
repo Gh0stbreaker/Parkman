@@ -12,6 +12,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<PersonProfile> PersonProfiles => Set<PersonProfile>();
     public DbSet<CompanyProfile> CompanyProfiles => Set<CompanyProfile>();
+    public DbSet<Vehicle> Vehicles => Set<Vehicle>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -48,6 +49,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             profile.Property(p => p.ContactEmail).IsRequired();
             profile.Property(p => p.PhoneNumber).IsRequired();
             profile.Property(p => p.BillingAddress).IsRequired();
+            profile.HasMany(p => p.Vehicles)
+                .WithOne(v => v.CompanyProfile)
+                .HasForeignKey(v => v.CompanyProfileUserId);
+        });
+
+        builder.Entity<Vehicle>(vehicle =>
+        {
+            vehicle.HasKey(v => v.Id);
+            vehicle.Property(v => v.LicensePlate).IsRequired();
+            vehicle.Property(v => v.Brand).IsRequired();
+            vehicle.Property(v => v.Type).IsRequired();
+            vehicle.Property(v => v.PropulsionType).IsRequired();
+
+            vehicle.HasOne(v => v.PersonProfile)
+                .WithOne(p => p.Vehicle)
+                .HasForeignKey<Vehicle>(v => v.PersonProfileUserId);
         });
     }
 }
