@@ -1,4 +1,4 @@
-namespace Parkman.Domain;
+namespace Parkman.Domain.Enums;
 
 public enum VehicleType
 {
