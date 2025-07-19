@@ -67,6 +67,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             vehicle.Property(v => v.Brand).IsRequired();
             vehicle.Property(v => v.Type).IsRequired();
             vehicle.Property(v => v.PropulsionType).IsRequired();
+            vehicle.Property(v => v.IsShareable);
 
             vehicle.HasOne(v => v.PersonProfile)
                 .WithOne(p => p.Vehicle)

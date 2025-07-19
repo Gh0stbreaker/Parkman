@@ -11,6 +11,8 @@ public class Vehicle
     public string Type { get; private set; } = string.Empty;
     public string PropulsionType { get; private set; } = string.Empty;
 
+    public bool IsShareable { get; private set; }
+
     public string? CompanyProfileUserId { get; private set; }
     public CompanyProfile? CompanyProfile { get; private set; }
 
@@ -19,12 +21,12 @@ public class Vehicle
 
     private Vehicle() { }
 
-    public Vehicle(string licensePlate, string brand, string type, string propulsionType)
+    public Vehicle(string licensePlate, string brand, string type, string propulsionType, bool isShareable = false)
     {
-        Update(licensePlate, brand, type, propulsionType);
+        Update(licensePlate, brand, type, propulsionType, isShareable);
     }
 
-    public void Update(string licensePlate, string brand, string type, string propulsionType)
+    public void Update(string licensePlate, string brand, string type, string propulsionType, bool isShareable = false)
     {
         if (string.IsNullOrWhiteSpace(licensePlate))
             throw new ArgumentException("License plate is required", nameof(licensePlate));
@@ -39,6 +41,7 @@ public class Vehicle
         Brand = brand;
         Type = type;
         PropulsionType = propulsionType;
+        IsShareable = isShareable;
     }
 
     internal void SetCompanyProfile(CompanyProfile companyProfile)
