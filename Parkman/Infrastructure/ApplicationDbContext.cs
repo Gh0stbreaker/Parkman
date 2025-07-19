@@ -93,6 +93,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         {
             spot.HasKey(s => s.Id);
             spot.Property(s => s.Identifier).IsRequired();
+            spot.Property(s => s.Type).IsRequired();
+            spot.Property(s => s.Accessibility).IsRequired();
+            spot.Property(s => s.AllowedPropulsion).IsRequired();
             spot.HasMany(s => s.Reservations)
                 .WithOne(r => r.ParkingSpot)
                 .HasForeignKey(r => r.ParkingSpotId);
