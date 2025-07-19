@@ -16,6 +16,7 @@ public class CompanyProfile
     public string BillingAddress { get; private set; } = string.Empty;
 
     public List<Vehicle> Vehicles { get; } = new();
+    public List<PersonProfile> Members { get; } = new();
 
     private CompanyProfile() { }
 
@@ -69,6 +70,13 @@ public class CompanyProfile
         if (vehicle == null) throw new ArgumentNullException(nameof(vehicle));
         Vehicles.Add(vehicle);
         vehicle.SetCompanyProfile(this);
+    }
+
+    internal void AddMember(PersonProfile personProfile)
+    {
+        if (personProfile == null) throw new ArgumentNullException(nameof(personProfile));
+        Members.Add(personProfile);
+        personProfile.SetCompanyProfile(this);
     }
 
     internal void SetUser(ApplicationUser user)

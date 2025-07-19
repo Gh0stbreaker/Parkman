@@ -37,6 +37,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             profile.Property(p => p.DateOfBirth);
             profile.Property(p => p.PhoneNumber).IsRequired();
             profile.Property(p => p.Address).IsRequired();
+            profile.HasOne(p => p.CompanyProfile)
+                .WithMany(c => c.Members)
+                .HasForeignKey(p => p.CompanyProfileUserId);
         });
 
         builder.Entity<CompanyProfile>(profile =>
@@ -52,6 +55,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             profile.HasMany(p => p.Vehicles)
                 .WithOne(v => v.CompanyProfile)
                 .HasForeignKey(v => v.CompanyProfileUserId);
+            profile.HasMany(p => p.Members)
+                .WithOne(m => m.CompanyProfile)
+                .HasForeignKey(m => m.CompanyProfileUserId);
         });
 
         builder.Entity<Vehicle>(vehicle =>

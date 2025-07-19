@@ -15,6 +15,9 @@ public class PersonProfile
 
     public Vehicle? Vehicle { get; private set; }
 
+    public string? CompanyProfileUserId { get; private set; }
+    public CompanyProfile? CompanyProfile { get; private set; }
+
     private PersonProfile() { }
 
     public PersonProfile(
@@ -57,6 +60,10 @@ public class PersonProfile
         {
             throw new InvalidOperationException("Person profile already has a vehicle.");
         }
+        if (vehicle.CompanyProfileUserId != null && vehicle.CompanyProfileUserId != CompanyProfileUserId)
+        {
+            throw new InvalidOperationException("Person is not authorized to use this company vehicle.");
+        }
         Vehicle = vehicle;
         vehicle.SetPersonProfile(this);
     }
@@ -65,5 +72,11 @@ public class PersonProfile
     {
         User = user;
         UserId = user.Id;
+    }
+
+    internal void SetCompanyProfile(CompanyProfile companyProfile)
+    {
+        CompanyProfile = companyProfile;
+        CompanyProfileUserId = companyProfile.UserId;
     }
 }
