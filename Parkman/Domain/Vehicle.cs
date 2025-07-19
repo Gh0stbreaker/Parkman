@@ -7,9 +7,9 @@ public class Vehicle
     public int Id { get; private set; }
 
     public string LicensePlate { get; private set; } = string.Empty;
-    public string Brand { get; private set; } = string.Empty;
-    public string Type { get; private set; } = string.Empty;
-    public string PropulsionType { get; private set; } = string.Empty;
+    public VehicleBrand Brand { get; private set; }
+    public VehicleType Type { get; private set; }
+    public VehiclePropulsionType PropulsionType { get; private set; }
 
     public bool IsShareable { get; private set; }
 
@@ -21,21 +21,21 @@ public class Vehicle
 
     private Vehicle() { }
 
-    public Vehicle(string licensePlate, string brand, string type, string propulsionType, bool isShareable = false)
+    public Vehicle(string licensePlate, VehicleBrand brand, VehicleType type, VehiclePropulsionType propulsionType, bool isShareable = false)
     {
         Update(licensePlate, brand, type, propulsionType, isShareable);
     }
 
-    public void Update(string licensePlate, string brand, string type, string propulsionType, bool isShareable = false)
+    public void Update(string licensePlate, VehicleBrand brand, VehicleType type, VehiclePropulsionType propulsionType, bool isShareable = false)
     {
         if (string.IsNullOrWhiteSpace(licensePlate))
             throw new ArgumentException("License plate is required", nameof(licensePlate));
-        if (string.IsNullOrWhiteSpace(brand))
-            throw new ArgumentException("Brand is required", nameof(brand));
-        if (string.IsNullOrWhiteSpace(type))
-            throw new ArgumentException("Type is required", nameof(type));
-        if (string.IsNullOrWhiteSpace(propulsionType))
-            throw new ArgumentException("Propulsion type is required", nameof(propulsionType));
+        if (!Enum.IsDefined(typeof(VehicleBrand), brand))
+            throw new ArgumentException("Invalid brand", nameof(brand));
+        if (!Enum.IsDefined(typeof(VehicleType), type))
+            throw new ArgumentException("Invalid vehicle type", nameof(type));
+        if (!Enum.IsDefined(typeof(VehiclePropulsionType), propulsionType))
+            throw new ArgumentException("Invalid propulsion type", nameof(propulsionType));
 
         LicensePlate = licensePlate;
         Brand = brand;
