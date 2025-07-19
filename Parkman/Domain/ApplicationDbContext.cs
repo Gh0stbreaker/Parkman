@@ -34,6 +34,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             profile.Property(p => p.FirstName).IsRequired();
             profile.Property(p => p.LastName).IsRequired();
             profile.Property(p => p.DateOfBirth);
+            profile.Property(p => p.PhoneNumber).IsRequired();
+            profile.Property(p => p.Address).IsRequired();
         });
 
         builder.Entity<CompanyProfile>(profile =>
@@ -42,6 +44,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             profile.Property(p => p.CompanyName).IsRequired();
             profile.Property(p => p.Ico).IsRequired();
             profile.Property(p => p.Dic).IsRequired();
+            profile.Property(p => p.ContactPersonName).IsRequired();
+            profile.Property(p => p.ContactEmail).IsRequired();
+            profile.Property(p => p.PhoneNumber).IsRequired();
+            profile.Property(p => p.BillingAddress).IsRequired();
         });
     }
 }
