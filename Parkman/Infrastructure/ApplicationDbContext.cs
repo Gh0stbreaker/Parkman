@@ -15,6 +15,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<PersonProfile> PersonProfiles => Set<PersonProfile>();
     public DbSet<CompanyProfile> CompanyProfiles => Set<CompanyProfile>();
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
+    public DbSet<ParkingLot> ParkingLots => Set<ParkingLot>();
+    public DbSet<ParkingSpot> ParkingSpots => Set<ParkingSpot>();
+    public DbSet<Reservation> Reservations => Set<Reservation>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -74,6 +77,32 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             vehicle.HasOne(v => v.PersonProfile)
                 .WithOne(p => p.Vehicle)
                 .HasForeignKey<Vehicle>(v => v.PersonProfileUserId);
+        });
+
+        builder.Entity<ParkingLot>(lot =>
+        {
+            lot.HasKey(l => l.Id);
+            lot.Property(l => l.Name).IsRequired();
+            lot.Property(l => l.Address).IsRequired();
+            lot.HasMany(l => l.Spots)
+                .WithOne(s => s.ParkingLot)
+                .HasForeignKey(s => s.ParkingLotId);
+        });
+
+        builder.Entity<ParkingSpot>(spot =>
+        {
+            spot.HasKey(s => s.Id);
+            spot.Property(s => s.Identifier).IsRequired();
+            spot.HasMany(s => s.Reservations)
+                .WithOne(r => r.ParkingSpot)
+                .HasForeignKey(r => r.ParkingSpotId);
+        });
+
+        builder.Entity<Reservation>(reservation =>
+        {
+            reservation.HasKey(r => r.Id);
+            reservation.Property(r => r.StartTime).IsRequired();
+            reservation.Property(r => r.EndTime).IsRequired();
         });
     }
 }
