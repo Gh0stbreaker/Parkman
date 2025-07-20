@@ -4,3 +4,23 @@ GET {{Parkman_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+POST {{Parkman_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "Password123!"
+}
+
+###
+
+POST {{Parkman_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "Password123!"
+}
+
+###
