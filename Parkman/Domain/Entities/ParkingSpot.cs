@@ -9,6 +9,8 @@ public class ParkingSpot
 {
     public int Id { get; private set; }
 
+    public string Label { get; private set; } = string.Empty;
+
     public string Identifier { get; private set; } = string.Empty;
 
     public ParkingSpotType Type { get; private set; }
@@ -24,24 +26,25 @@ public class ParkingSpot
     private ParkingSpot() { }
 
     public ParkingSpot(
-        string identifier,
+        string label,
         ParkingSpotType type,
         ParkingSpotAccessibility accessibility,
         ParkingSpotAllowedPropulsionType allowedPropulsion)
     {
-        Update(identifier, type, accessibility, allowedPropulsion);
+        Update(label, type, accessibility, allowedPropulsion);
     }
 
     public void Update(
-        string identifier,
+        string label,
         ParkingSpotType type,
         ParkingSpotAccessibility accessibility,
         ParkingSpotAllowedPropulsionType allowedPropulsion)
     {
-        if (string.IsNullOrWhiteSpace(identifier))
-            throw new ArgumentException("Identifier is required", nameof(identifier));
+        if (string.IsNullOrWhiteSpace(label))
+            throw new ArgumentException("Label is required", nameof(label));
 
-        Identifier = identifier;
+        Label = label;
+        RebuildIdentifier();
         Type = type;
         Accessibility = accessibility;
         AllowedPropulsion = allowedPropulsion;
@@ -51,9 +54,10 @@ public class ParkingSpot
     {
         ParkingLot = lot;
         ParkingLotId = lot.Id;
+        RebuildIdentifier();
     }
 
-    internal void AddReservation(Reservation reservation)
+    public void AddReservation(Reservation reservation)
     {
         if (reservation == null) throw new ArgumentNullException(nameof(reservation));
         if (HasReservationConflict(reservation.StartTime, reservation.EndTime))
@@ -71,5 +75,10 @@ public class ParkingSpot
             throw new ArgumentException("End time must be after start time", nameof(endTime));
 
         return _reservations.Any(r => r.StartTime < endTime && startTime < r.EndTime);
+    }
+
+    private void RebuildIdentifier()
+    {
+        Identifier = ParkingLot != null ? $"{ParkingLot.Name}{Label}" : Label;
     }
 }

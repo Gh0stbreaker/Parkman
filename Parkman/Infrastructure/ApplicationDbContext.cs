@@ -112,6 +112,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ParkingSpot>(spot =>
         {
             spot.HasKey(s => s.Id);
+            spot.Property(s => s.Label).IsRequired();
             spot.Property(s => s.Identifier).IsRequired();
             spot.Property(s => s.Type).IsRequired();
             spot.Property(s => s.Accessibility).IsRequired();
