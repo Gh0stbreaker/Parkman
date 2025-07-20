@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Parkman.Domain.Enums;
 
 namespace Parkman.Domain.Entities;
@@ -55,7 +56,20 @@ public class ParkingSpot
     internal void AddReservation(Reservation reservation)
     {
         if (reservation == null) throw new ArgumentNullException(nameof(reservation));
+        if (HasReservationConflict(reservation.StartTime, reservation.EndTime))
+        {
+            throw new InvalidOperationException("Reservation overlaps with an existing reservation.");
+        }
+
         _reservations.Add(reservation);
         reservation.SetParkingSpot(this);
+    }
+
+    public bool HasReservationConflict(DateTime startTime, DateTime endTime)
+    {
+        if (endTime <= startTime)
+            throw new ArgumentException("End time must be after start time", nameof(endTime));
+
+        return _reservations.Any(r => r.StartTime < endTime && startTime < r.EndTime);
     }
 }
