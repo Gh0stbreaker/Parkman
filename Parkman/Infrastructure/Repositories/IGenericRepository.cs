@@ -15,7 +15,8 @@ namespace Parkman.Infrastructure.Repositories
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             string includeProperties = "",
             int? skip = null,
-            int? take = null);
+            int? take = null,
+            string? search = null);
 
         Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);

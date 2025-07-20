@@ -29,13 +29,19 @@ namespace Parkman.Infrastructure.Repositories
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             string includeProperties = "",
             int? skip = null,
-            int? take = null)
+            int? take = null,
+            string? search = null)
         {
             IQueryable<TEntity> query = _dbSet;
 
             if (filter != null)
             {
                 query = query.Where(filter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = ApplySearch(query, search);
             }
 
             foreach (var includeProperty in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
@@ -82,6 +88,33 @@ namespace Parkman.Infrastructure.Repositories
             }
             _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
+        }
+
+        private static IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query, string search)
+        {
+            var parameter = Expression.Parameter(typeof(TEntity), "e");
+            Expression? predicate = null;
+
+            var searchPattern = Expression.Constant($"%{search}%");
+            var functions = Expression.Property(null, typeof(EF), nameof(EF.Functions));
+            var likeMethod = typeof(DbFunctionsExtensions).GetMethod(
+                nameof(DbFunctionsExtensions.Like),
+                new[] { typeof(DbFunctions), typeof(string), typeof(string) })!;
+
+            foreach (var property in typeof(TEntity).GetProperties().Where(p => p.PropertyType == typeof(string)))
+            {
+                var propertyAccess = Expression.Property(parameter, property);
+                var likeCall = Expression.Call(likeMethod, functions, propertyAccess, searchPattern);
+                predicate = predicate == null ? likeCall : Expression.OrElse(predicate, likeCall);
+            }
+
+            if (predicate == null)
+            {
+                return query;
+            }
+
+            var lambda = Expression.Lambda<Func<TEntity, bool>>(predicate, parameter);
+            return query.Where(lambda);
         }
     }
 }
