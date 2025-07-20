@@ -8,11 +8,15 @@ namespace Parkman.Controllers;
 [Route("api/[controller]")]
 public class RegistrationController : ControllerBase
 {
-    private readonly IUserVehicleRegistrationService _service;
+    private readonly IUserVehicleRegistrationService _vehicleRegistrationService;
+    private readonly IUserCompanyRegistrationService _companyRegistrationService;
 
-    public RegistrationController(IUserVehicleRegistrationService service)
+    public RegistrationController(
+        IUserVehicleRegistrationService vehicleRegistrationService,
+        IUserCompanyRegistrationService companyRegistrationService)
     {
-        _service = service;
+        _vehicleRegistrationService = vehicleRegistrationService;
+        _companyRegistrationService = companyRegistrationService;
     }
 
     [HttpPost]
@@ -21,7 +25,7 @@ public class RegistrationController : ControllerBase
         if (!ModelState.IsValid)
             return ValidationProblem(ModelState);
 
-        var result = await _service.RegisterAsync(
+        var result = await _vehicleRegistrationService.RegisterAsync(
             request.Email,
             request.Password,
             request.FirstName,
@@ -34,6 +38,35 @@ public class RegistrationController : ControllerBase
             request.Type,
             request.PropulsionType,
             request.Shareable);
+
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+            return ValidationProblem(ModelState);
+        }
+
+        return Ok();
+    }
+
+    [HttpPost("company")]
+    public async Task<IActionResult> RegisterCompany(RegisterCompanyRequest request)
+    {
+        if (!ModelState.IsValid)
+            return ValidationProblem(ModelState);
+
+        var result = await _companyRegistrationService.RegisterAsync(
+            request.Email,
+            request.Password,
+            request.CompanyName,
+            request.Ico,
+            request.Dic,
+            request.ContactPersonName,
+            request.ContactEmail,
+            request.PhoneNumber,
+            request.BillingAddress);
 
         if (!result.Succeeded)
         {
