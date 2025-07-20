@@ -6,8 +6,28 @@
     <title>Parkman Frontend</title>
     <base href="/" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        button: '#fffffe',
+                        background: '#fffffe',
+                        headline: '#094067',
+                        paragraph: '#5f6c7b',
+                        'button-text': '#fffffe',
+                        stroke: '#094067',
+                        main: '#fffffe',
+                        highlight: '#3da9fc',
+                        secondary: '#90b4ce',
+                        tertiary: '#ef4565'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-background text-paragraph">
     <div id="app">Loading...</div>
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
