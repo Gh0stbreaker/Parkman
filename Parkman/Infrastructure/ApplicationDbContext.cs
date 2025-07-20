@@ -18,6 +18,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<ParkingLot> ParkingLots => Set<ParkingLot>();
     public DbSet<ParkingSpot> ParkingSpots => Set<ParkingSpot>();
     public DbSet<Reservation> Reservations => Set<Reservation>();
+    public DbSet<ProfileReservation> ProfileReservations => Set<ProfileReservation>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -106,6 +107,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             reservation.HasKey(r => r.Id);
             reservation.Property(r => r.StartTime).IsRequired();
             reservation.Property(r => r.EndTime).IsRequired();
+            reservation.HasMany(r => r.ProfileReservations)
+                .WithOne(pr => pr.Reservation)
+                .HasForeignKey(pr => pr.ReservationId);
+        });
+
+        builder.Entity<ProfileReservation>(pr =>
+        {
+            pr.HasKey(x => new { x.PersonProfileUserId, x.ReservationId });
+            pr.HasOne(x => x.PersonProfile)
+                .WithMany(p => p.ProfileReservations)
+                .HasForeignKey(x => x.PersonProfileUserId);
         });
     }
 }
