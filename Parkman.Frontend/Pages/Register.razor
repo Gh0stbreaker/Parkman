@@ -1,62 +1,62 @@
 @page "/register"
 @using System.Net.Http.Json
 
-<h3>Register</h3>
+<h3 class="text-2xl font-bold mb-4 text-center">Register</h3>
 
-<EditForm Model="_model" OnValidSubmit="RegisterUser">
+<EditForm Model="_model" OnValidSubmit="RegisterUser" class="max-w-lg mx-auto bg-white p-6 rounded shadow">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div>
-        <label>Email:</label>
-        <InputText @bind-Value="_model.Email" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Email</label>
+        <InputText @bind-Value="_model.Email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>Password:</label>
-        <InputText @bind-Value="_model.Password" type="password" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Password</label>
+        <InputText @bind-Value="_model.Password" type="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>First name:</label>
-        <InputText @bind-Value="_model.FirstName" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">First name</label>
+        <InputText @bind-Value="_model.FirstName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>Last name:</label>
-        <InputText @bind-Value="_model.LastName" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Last name</label>
+        <InputText @bind-Value="_model.LastName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>Date of birth:</label>
-        <InputDate @bind-Value="_model.DateOfBirth" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Date of birth</label>
+        <InputDate @bind-Value="_model.DateOfBirth" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>Phone number:</label>
-        <InputText @bind-Value="_model.PhoneNumber" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Phone number</label>
+        <InputText @bind-Value="_model.PhoneNumber" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>Address:</label>
-        <InputText @bind-Value="_model.Address" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Address</label>
+        <InputText @bind-Value="_model.Address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>License plate:</label>
-        <InputText @bind-Value="_model.LicensePlate" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">License plate</label>
+        <InputText @bind-Value="_model.LicensePlate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>Brand:</label>
-        <InputText @bind-Value="_model.Brand" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Brand</label>
+        <InputText @bind-Value="_model.Brand" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>Type:</label>
-        <InputText @bind-Value="_model.Type" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Type</label>
+        <InputText @bind-Value="_model.Type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>Propulsion type:</label>
-        <InputText @bind-Value="_model.PropulsionType" />
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Propulsion type</label>
+        <InputText @bind-Value="_model.PropulsionType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
     </div>
-    <div>
-        <label>Shareable:</label>
-        <InputCheckbox @bind-Value="_model.Shareable" />
+    <div class="flex items-center mb-6">
+        <InputCheckbox @bind-Value="_model.Shareable" class="h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+        <label class="ml-2 block text-sm text-gray-700">Shareable</label>
     </div>
 
-    <button type="submit">Register</button>
+    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700">Register</button>
 </EditForm>
 
 @code {
