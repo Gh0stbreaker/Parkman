@@ -17,6 +17,7 @@ public class CompanyProfile
 
     public List<Vehicle> Vehicles { get; } = new();
     public List<PersonProfile> Members { get; } = new();
+    public List<CompanyReservation> CompanyReservations { get; } = new();
 
     private CompanyProfile() { }
 
@@ -77,6 +78,14 @@ public class CompanyProfile
         if (personProfile == null) throw new ArgumentNullException(nameof(personProfile));
         Members.Add(personProfile);
         personProfile.SetCompanyProfile(this);
+    }
+
+    internal void AddReservation(Reservation reservation)
+    {
+        if (reservation == null) throw new ArgumentNullException(nameof(reservation));
+        var link = new CompanyReservation(this, reservation);
+        CompanyReservations.Add(link);
+        reservation.AddCompanyReservation(link);
     }
 
     internal void SetUser(ApplicationUser user)
