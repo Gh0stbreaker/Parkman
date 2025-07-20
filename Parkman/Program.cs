@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Parkman.Infrastructure;
+using Parkman.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddGenericRepositories();
 
 var app = builder.Build();
 
