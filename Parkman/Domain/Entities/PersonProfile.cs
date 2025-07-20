@@ -16,7 +16,8 @@ public class PersonProfile
 
     public Vehicle? Vehicle { get; private set; }
 
-    public List<ProfileReservation> ProfileReservations { get; } = new();
+    private readonly List<ProfileReservation> _profileReservations = new();
+    public IReadOnlyCollection<ProfileReservation> ProfileReservations => _profileReservations;
 
     public string? CompanyProfileUserId { get; private set; }
     public CompanyProfile? CompanyProfile { get; private set; }
@@ -75,7 +76,7 @@ public class PersonProfile
     {
         if (reservation == null) throw new ArgumentNullException(nameof(reservation));
         var link = new ProfileReservation(this, reservation);
-        ProfileReservations.Add(link);
+        _profileReservations.Add(link);
         reservation.AddProfileReservation(link);
     }
 

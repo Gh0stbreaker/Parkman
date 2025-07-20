@@ -17,7 +17,8 @@ public class ParkingSpot
     public int ParkingLotId { get; private set; }
     public ParkingLot ParkingLot { get; private set; } = null!;
 
-    public List<Reservation> Reservations { get; } = new();
+    private readonly List<Reservation> _reservations = new();
+    public IReadOnlyCollection<Reservation> Reservations => _reservations;
 
     private ParkingSpot() { }
 
@@ -54,7 +55,7 @@ public class ParkingSpot
     internal void AddReservation(Reservation reservation)
     {
         if (reservation == null) throw new ArgumentNullException(nameof(reservation));
-        Reservations.Add(reservation);
+        _reservations.Add(reservation);
         reservation.SetParkingSpot(this);
     }
 }

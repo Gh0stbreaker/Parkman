@@ -15,9 +15,12 @@ public class CompanyProfile
     public string PhoneNumber { get; private set; } = string.Empty;
     public string BillingAddress { get; private set; } = string.Empty;
 
-    public List<Vehicle> Vehicles { get; } = new();
-    public List<PersonProfile> Members { get; } = new();
-    public List<CompanyReservation> CompanyReservations { get; } = new();
+    private readonly List<Vehicle> _vehicles = new();
+    public IReadOnlyCollection<Vehicle> Vehicles => _vehicles;
+    private readonly List<PersonProfile> _members = new();
+    public IReadOnlyCollection<PersonProfile> Members => _members;
+    private readonly List<CompanyReservation> _companyReservations = new();
+    public IReadOnlyCollection<CompanyReservation> CompanyReservations => _companyReservations;
 
     private CompanyProfile() { }
 
@@ -69,14 +72,14 @@ public class CompanyProfile
     internal void AddVehicle(Vehicle vehicle)
     {
         if (vehicle == null) throw new ArgumentNullException(nameof(vehicle));
-        Vehicles.Add(vehicle);
+        _vehicles.Add(vehicle);
         vehicle.SetCompanyProfile(this);
     }
 
     internal void AddMember(PersonProfile personProfile)
     {
         if (personProfile == null) throw new ArgumentNullException(nameof(personProfile));
-        Members.Add(personProfile);
+        _members.Add(personProfile);
         personProfile.SetCompanyProfile(this);
     }
 
@@ -84,7 +87,7 @@ public class CompanyProfile
     {
         if (reservation == null) throw new ArgumentNullException(nameof(reservation));
         var link = new CompanyReservation(this, reservation);
-        CompanyReservations.Add(link);
+        _companyReservations.Add(link);
         reservation.AddCompanyReservation(link);
     }
 

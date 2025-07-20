@@ -13,8 +13,10 @@ public class Reservation
     public int ParkingSpotId { get; private set; }
     public ParkingSpot ParkingSpot { get; private set; } = null!;
 
-    public List<ProfileReservation> ProfileReservations { get; } = new();
-    public List<CompanyReservation> CompanyReservations { get; } = new();
+    private readonly List<ProfileReservation> _profileReservations = new();
+    public IReadOnlyCollection<ProfileReservation> ProfileReservations => _profileReservations;
+    private readonly List<CompanyReservation> _companyReservations = new();
+    public IReadOnlyCollection<CompanyReservation> CompanyReservations => _companyReservations;
 
     private Reservation() { }
 
@@ -41,12 +43,12 @@ public class Reservation
     internal void AddProfileReservation(ProfileReservation link)
     {
         if (link == null) throw new ArgumentNullException(nameof(link));
-        ProfileReservations.Add(link);
+        _profileReservations.Add(link);
     }
 
     internal void AddCompanyReservation(CompanyReservation link)
     {
         if (link == null) throw new ArgumentNullException(nameof(link));
-        CompanyReservations.Add(link);
+        _companyReservations.Add(link);
     }
 }
