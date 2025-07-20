@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Parkman.Domain.Entities;
 
@@ -14,6 +15,8 @@ public class PersonProfile
     public string Address { get; private set; } = string.Empty;
 
     public Vehicle? Vehicle { get; private set; }
+
+    public List<ProfileReservation> ProfileReservations { get; } = new();
 
     public string? CompanyProfileUserId { get; private set; }
     public CompanyProfile? CompanyProfile { get; private set; }
@@ -66,6 +69,14 @@ public class PersonProfile
         }
         Vehicle = vehicle;
         vehicle.SetPersonProfile(this);
+    }
+
+    internal void AddReservation(Reservation reservation)
+    {
+        if (reservation == null) throw new ArgumentNullException(nameof(reservation));
+        var link = new ProfileReservation(this, reservation);
+        ProfileReservations.Add(link);
+        reservation.AddProfileReservation(link);
     }
 
     internal void SetUser(ApplicationUser user)

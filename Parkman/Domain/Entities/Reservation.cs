@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Parkman.Domain.Entities;
 
@@ -11,6 +12,8 @@ public class Reservation
 
     public int ParkingSpotId { get; private set; }
     public ParkingSpot ParkingSpot { get; private set; } = null!;
+
+    public List<ProfileReservation> ProfileReservations { get; } = new();
 
     private Reservation() { }
 
@@ -32,5 +35,11 @@ public class Reservation
     {
         ParkingSpot = spot;
         ParkingSpotId = spot.Id;
+    }
+
+    internal void AddProfileReservation(ProfileReservation link)
+    {
+        if (link == null) throw new ArgumentNullException(nameof(link));
+        ProfileReservations.Add(link);
     }
 }
