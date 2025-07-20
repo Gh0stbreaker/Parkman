@@ -15,6 +15,7 @@ public static class ServiceServiceCollectionExtensions
         services.AddScoped<Entities.IReservationService, Entities.ReservationService>();
         services.AddScoped<Entities.IProfileReservationService, Entities.ProfileReservationService>();
         services.AddScoped<Entities.ICompanyReservationService, Entities.CompanyReservationService>();
+        services.AddScoped<IUserVehicleRegistrationService, UserVehicleRegistrationService>();
         return services;
     }
 }
