@@ -1,4 +1,4 @@
-﻿namespace Parkman.Domain.Enums
+namespace Parkman.Domain.Enums
 {
     public enum VehicleBrand
     {
