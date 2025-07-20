@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Parkman.Infrastructure;
 using Parkman.Infrastructure.Repositories;
+using Parkman.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRepositories();
+builder.Services.AddServices();
 
 var app = builder.Build();
 
