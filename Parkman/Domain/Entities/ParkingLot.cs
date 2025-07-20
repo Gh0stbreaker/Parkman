@@ -31,7 +31,7 @@ public class ParkingLot
         Address = address;
     }
 
-    internal void AddSpot(ParkingSpot spot)
+    public void AddSpot(ParkingSpot spot)
     {
         if (spot == null) throw new ArgumentNullException(nameof(spot));
         _spots.Add(spot);
