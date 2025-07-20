@@ -18,6 +18,14 @@ namespace Parkman.Infrastructure.Repositories
             int? take = null,
             string? search = null);
 
+        Task<Common.PagedResult<TEntity>> ListPagedAsync(
+            Expression<Func<TEntity, bool>>? filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            string includeProperties = "",
+            int? skip = null,
+            int? take = null,
+            string? search = null);
+
         Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);

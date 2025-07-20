@@ -66,6 +66,51 @@ namespace Parkman.Infrastructure.Repositories
             return await query.AsNoTracking().ToListAsync();
         }
 
+        public async Task<Common.PagedResult<TEntity>> ListPagedAsync(
+            Expression<Func<TEntity, bool>>? filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            string includeProperties = "",
+            int? skip = null,
+            int? take = null,
+            string? search = null)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = ApplySearch(query, search);
+            }
+
+            foreach (var includeProperty in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty.Trim());
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            if (skip.HasValue)
+            {
+                query = query.Skip(skip.Value);
+            }
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value);
+            }
+
+            var items = await query.AsNoTracking().ToListAsync();
+            return new Common.PagedResult<TEntity>(items, totalCount);
+        }
+
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
