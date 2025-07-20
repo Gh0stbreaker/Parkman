@@ -1,0 +1,87 @@
+@page "/register"
+@using System.Net.Http.Json
+
+<h3>Register</h3>
+
+<EditForm Model="_model" OnValidSubmit="RegisterUser">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="_model.Email" />
+    </div>
+    <div>
+        <label>Password:</label>
+        <InputText @bind-Value="_model.Password" type="password" />
+    </div>
+    <div>
+        <label>First name:</label>
+        <InputText @bind-Value="_model.FirstName" />
+    </div>
+    <div>
+        <label>Last name:</label>
+        <InputText @bind-Value="_model.LastName" />
+    </div>
+    <div>
+        <label>Date of birth:</label>
+        <InputDate @bind-Value="_model.DateOfBirth" />
+    </div>
+    <div>
+        <label>Phone number:</label>
+        <InputText @bind-Value="_model.PhoneNumber" />
+    </div>
+    <div>
+        <label>Address:</label>
+        <InputText @bind-Value="_model.Address" />
+    </div>
+    <div>
+        <label>License plate:</label>
+        <InputText @bind-Value="_model.LicensePlate" />
+    </div>
+    <div>
+        <label>Brand:</label>
+        <InputText @bind-Value="_model.Brand" />
+    </div>
+    <div>
+        <label>Type:</label>
+        <InputText @bind-Value="_model.Type" />
+    </div>
+    <div>
+        <label>Propulsion type:</label>
+        <InputText @bind-Value="_model.PropulsionType" />
+    </div>
+    <div>
+        <label>Shareable:</label>
+        <InputCheckbox @bind-Value="_model.Shareable" />
+    </div>
+
+    <button type="submit">Register</button>
+</EditForm>
+
+@code {
+    private RegisterWithVehicleRequest _model = new();
+
+    [Inject] private HttpClient Http { get; set; } = default!;
+
+    private async Task RegisterUser()
+    {
+        await Http.PostAsJsonAsync("api/Registration", _model);
+    }
+
+    public class RegisterWithVehicleRequest
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public DateOnly? DateOfBirth { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        public string LicensePlate { get; set; } = string.Empty;
+        public string Brand { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
+        public string PropulsionType { get; set; } = string.Empty;
+        public bool Shareable { get; set; }
+    }
+}
