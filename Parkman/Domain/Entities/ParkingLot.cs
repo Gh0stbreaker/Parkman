@@ -10,7 +10,8 @@ public class ParkingLot
     public string Name { get; private set; } = string.Empty;
     public string Address { get; private set; } = string.Empty;
 
-    public List<ParkingSpot> Spots { get; } = new();
+    private readonly List<ParkingSpot> _spots = new();
+    public IReadOnlyCollection<ParkingSpot> Spots => _spots;
 
     private ParkingLot() { }
 
@@ -33,7 +34,7 @@ public class ParkingLot
     internal void AddSpot(ParkingSpot spot)
     {
         if (spot == null) throw new ArgumentNullException(nameof(spot));
-        Spots.Add(spot);
+        _spots.Add(spot);
         spot.SetParkingLot(this);
     }
 }

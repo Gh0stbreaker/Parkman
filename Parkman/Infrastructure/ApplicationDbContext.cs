@@ -47,6 +47,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             profile.HasOne(p => p.CompanyProfile)
                 .WithMany(c => c.Members)
                 .HasForeignKey(p => p.CompanyProfileUserId);
+            profile.Navigation(p => p.ProfileReservations)
+                .HasField("_profileReservations")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
         builder.Entity<CompanyProfile>(profile =>
@@ -62,12 +65,21 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             profile.HasMany(p => p.Vehicles)
                 .WithOne(v => v.CompanyProfile)
                 .HasForeignKey(v => v.CompanyProfileUserId);
+            profile.Navigation(p => p.Vehicles)
+                .HasField("_vehicles")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
             profile.HasMany(p => p.Members)
                 .WithOne(m => m.CompanyProfile)
                 .HasForeignKey(m => m.CompanyProfileUserId);
+            profile.Navigation(p => p.Members)
+                .HasField("_members")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
             profile.HasMany(p => p.CompanyReservations)
                 .WithOne(cr => cr.CompanyProfile)
                 .HasForeignKey(cr => cr.CompanyProfileUserId);
+            profile.Navigation(p => p.CompanyReservations)
+                .HasField("_companyReservations")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
         builder.Entity<Vehicle>(vehicle =>
@@ -92,6 +104,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             lot.HasMany(l => l.Spots)
                 .WithOne(s => s.ParkingLot)
                 .HasForeignKey(s => s.ParkingLotId);
+            lot.Navigation(l => l.Spots)
+                .HasField("_spots")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
         builder.Entity<ParkingSpot>(spot =>
@@ -104,6 +119,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             spot.HasMany(s => s.Reservations)
                 .WithOne(r => r.ParkingSpot)
                 .HasForeignKey(r => r.ParkingSpotId);
+            spot.Navigation(s => s.Reservations)
+                .HasField("_reservations")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
         builder.Entity<Reservation>(reservation =>
@@ -114,9 +132,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             reservation.HasMany(r => r.ProfileReservations)
                 .WithOne(pr => pr.Reservation)
                 .HasForeignKey(pr => pr.ReservationId);
+            reservation.Navigation(r => r.ProfileReservations)
+                .HasField("_profileReservations")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
             reservation.HasMany(r => r.CompanyReservations)
                 .WithOne(cr => cr.Reservation)
                 .HasForeignKey(cr => cr.ReservationId);
+            reservation.Navigation(r => r.CompanyReservations)
+                .HasField("_companyReservations")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
         builder.Entity<ProfileReservation>(pr =>
