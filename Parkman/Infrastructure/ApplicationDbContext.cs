@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<ParkingSpot> ParkingSpots => Set<ParkingSpot>();
     public DbSet<Reservation> Reservations => Set<Reservation>();
     public DbSet<ProfileReservation> ProfileReservations => Set<ProfileReservation>();
+    public DbSet<CompanyReservation> CompanyReservations => Set<CompanyReservation>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -64,6 +65,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             profile.HasMany(p => p.Members)
                 .WithOne(m => m.CompanyProfile)
                 .HasForeignKey(m => m.CompanyProfileUserId);
+            profile.HasMany(p => p.CompanyReservations)
+                .WithOne(cr => cr.CompanyProfile)
+                .HasForeignKey(cr => cr.CompanyProfileUserId);
         });
 
         builder.Entity<Vehicle>(vehicle =>
@@ -110,6 +114,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             reservation.HasMany(r => r.ProfileReservations)
                 .WithOne(pr => pr.Reservation)
                 .HasForeignKey(pr => pr.ReservationId);
+            reservation.HasMany(r => r.CompanyReservations)
+                .WithOne(cr => cr.Reservation)
+                .HasForeignKey(cr => cr.ReservationId);
         });
 
         builder.Entity<ProfileReservation>(pr =>
@@ -118,6 +125,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             pr.HasOne(x => x.PersonProfile)
                 .WithMany(p => p.ProfileReservations)
                 .HasForeignKey(x => x.PersonProfileUserId);
+        });
+
+        builder.Entity<CompanyReservation>(cr =>
+        {
+            cr.HasKey(x => new { x.CompanyProfileUserId, x.ReservationId });
+            cr.HasOne(x => x.CompanyProfile)
+                .WithMany(c => c.CompanyReservations)
+                .HasForeignKey(x => x.CompanyProfileUserId);
         });
     }
 }

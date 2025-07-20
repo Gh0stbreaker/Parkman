@@ -14,6 +14,7 @@ public class Reservation
     public ParkingSpot ParkingSpot { get; private set; } = null!;
 
     public List<ProfileReservation> ProfileReservations { get; } = new();
+    public List<CompanyReservation> CompanyReservations { get; } = new();
 
     private Reservation() { }
 
@@ -41,5 +42,11 @@ public class Reservation
     {
         if (link == null) throw new ArgumentNullException(nameof(link));
         ProfileReservations.Add(link);
+    }
+
+    internal void AddCompanyReservation(CompanyReservation link)
+    {
+        if (link == null) throw new ArgumentNullException(nameof(link));
+        CompanyReservations.Add(link);
     }
 }
