@@ -4,9 +4,102 @@
 
 <h3 class="text-2xl font-bold mb-4 text-center text-headline">Register</h3>
 
-<EditForm Model="_model" OnValidSubmit="RegisterUser" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<div class="flex justify-center space-x-4 mb-4">
+    <button class="px-4 py-2 rounded-lg shadow-md focus:outline-none @(registerAsCompany ? "bg-secondary" : "bg-highlight text-white")" @onclick="() => registerAsCompany = false">Person</button>
+    <button class="px-4 py-2 rounded-lg shadow-md focus:outline-none @(registerAsCompany ? "bg-highlight text-white" : "bg-secondary")" @onclick="() => registerAsCompany = true">Company</button>
+</div>
+
+@if (registerAsCompany)
+{
+    <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <h4 class="text-xl font-semibold mt-6 mb-4 text-headline border-b border-muted pb-1">Account Information</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-headline">
+                    <i class="fas fa-envelope mr-1"></i>
+                    Email
+                </label>
+                <InputText @bind-Value="_companyModel.Email" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.Email)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-headline">
+                    <i class="fas fa-lock mr-1"></i>
+                    Password
+                </label>
+                <div class="flex items-center">
+                    <InputText @bind-Value="_companyModel.Password" type="@(showPassword ? "text" : "password")" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                    <button type="button" class="ml-2 text-sm text-paragraph" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+                </div>
+                <ValidationMessage For="@(() => _companyModel.Password)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-headline">
+                    <i class="fas fa-lock mr-1"></i>
+                    Confirm Password
+                </label>
+                <InputText @bind-Value="_companyModel.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.ConfirmPassword)" class="text-red-500 text-sm mt-1" />
+            </div>
+        </div>
+
+        <h4 class="text-xl font-semibold mt-6 mb-4 text-headline border-b border-muted pb-1">Company Details</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-headline">Company Name</label>
+                <InputText @bind-Value="_companyModel.CompanyName" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.CompanyName)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-headline">IČO</label>
+                <InputText @bind-Value="_companyModel.Ico" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.Ico)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-headline">DIČ</label>
+                <InputText @bind-Value="_companyModel.Dic" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.Dic)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-headline">Contact Name</label>
+                <InputText @bind-Value="_companyModel.ContactPersonName" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.ContactPersonName)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-headline">Contact Email</label>
+                <InputText @bind-Value="_companyModel.ContactEmail" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.ContactEmail)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-headline">Phone Number</label>
+                <InputText @bind-Value="_companyModel.PhoneNumber" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.PhoneNumber)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-headline">Billing Address</label>
+                <InputText @bind-Value="_companyModel.BillingAddress" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.BillingAddress)" class="text-red-500 text-sm mt-1" />
+            </div>
+        </div>
+
+        <button type="submit" class="w-full bg-highlight text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-tertiary transition duration-200 disabled:opacity-50" disabled="@isSubmitting">
+            @(isSubmitting ? "Registering..." : "Register")
+        </button>
+
+        @if (successMessage != null)
+        {
+            <p class="text-green-600 text-center mt-4">@successMessage</p>
+        }
+    </EditForm>
+}
+else
+{
+    <EditForm Model="_model" OnValidSubmit="RegisterUser" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
     <!-- Úèetní údaje -->
     <h4 class="text-xl font-semibold mt-6 mb-4 text-headline border-b border-muted pb-1">Account Information</h4>
@@ -143,6 +236,8 @@
 
 @code {
     private RegisterWithVehicleRequest _model = new();
+    private RegisterCompanyFormModel _companyModel = new();
+    private bool registerAsCompany;
     private bool showPassword;
     private bool isSubmitting;
     private string? successMessage;
@@ -159,6 +254,34 @@
         {
             successMessage = "Registration successful!";
             _model = new RegisterWithVehicleRequest();
+        }
+
+        isSubmitting = false;
+    }
+
+    private async Task RegisterCompany()
+    {
+        isSubmitting = true;
+        successMessage = null;
+        var request = new RegisterCompanyRequest
+        {
+            Email = _companyModel.Email,
+            Password = _companyModel.Password,
+            CompanyName = _companyModel.CompanyName,
+            Ico = _companyModel.Ico,
+            Dic = _companyModel.Dic,
+            ContactPersonName = _companyModel.ContactPersonName,
+            ContactEmail = _companyModel.ContactEmail,
+            PhoneNumber = _companyModel.PhoneNumber,
+            BillingAddress = _companyModel.BillingAddress
+        };
+
+        var response = await Http.PostAsJsonAsync("api/Registration/company", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            successMessage = "Registration successful!";
+            _companyModel = new RegisterCompanyFormModel();
         }
 
         isSubmitting = false;
@@ -203,5 +326,50 @@
         public string PropulsionType { get; set; } = string.Empty;
 
         public bool Shareable { get; set; }
+    }
+
+    public class RegisterCompanyFormModel
+    {
+        [Required, EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
+
+        [Required, Compare(nameof(Password))]
+        public string ConfirmPassword { get; set; } = string.Empty;
+
+        [Required]
+        public string CompanyName { get; set; } = string.Empty;
+
+        [Required]
+        public string Ico { get; set; } = string.Empty;
+
+        public string Dic { get; set; } = string.Empty;
+
+        [Required]
+        public string ContactPersonName { get; set; } = string.Empty;
+
+        [Required, EmailAddress]
+        public string ContactEmail { get; set; } = string.Empty;
+
+        [Required, Phone]
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        [Required]
+        public string BillingAddress { get; set; } = string.Empty;
+    }
+
+    private class RegisterCompanyRequest
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string CompanyName { get; set; } = string.Empty;
+        public string Ico { get; set; } = string.Empty;
+        public string Dic { get; set; } = string.Empty;
+        public string ContactPersonName { get; set; } = string.Empty;
+        public string ContactEmail { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+        public string BillingAddress { get; set; } = string.Empty;
     }
 }
