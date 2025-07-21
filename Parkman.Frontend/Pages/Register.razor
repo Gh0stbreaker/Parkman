@@ -100,7 +100,13 @@
                     <i class="fas fa-car-side mr-1"></i>
                     Brand
                 </label>
-                <InputText @bind-Value="_companyModel.Brand" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <InputSelect @bind-Value="_companyModel.Brand" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none">
+                    <option value="">Select brand</option>
+                    @foreach (var brand in VehicleBrands)
+                    {
+                        <option value="@brand">@brand</option>
+                    }
+                </InputSelect>
                 <ValidationMessage For="@(() => _companyModel.Brand)" class="text-red-500 text-sm mt-1" />
             </div>
             <div>
@@ -108,7 +114,13 @@
                     <i class="fas fa-tag mr-1"></i>
                     Type
                 </label>
-                <InputText @bind-Value="_companyModel.Type" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <InputSelect @bind-Value="_companyModel.Type" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none">
+                    <option value="">Select type</option>
+                    @foreach (var type in VehicleTypes)
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </InputSelect>
                 <ValidationMessage For="@(() => _companyModel.Type)" class="text-red-500 text-sm mt-1" />
             </div>
             <div>
@@ -116,7 +128,13 @@
                     <i class="fas fa-gas-pump mr-1"></i>
                     Propulsion Type
                 </label>
-                <InputText @bind-Value="_companyModel.PropulsionType" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <InputSelect @bind-Value="_companyModel.PropulsionType" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none">
+                    <option value="">Select propulsion</option>
+                    @foreach (var propulsion in VehiclePropulsionTypes)
+                    {
+                        <option value="@propulsion">@propulsion</option>
+                    }
+                </InputSelect>
                 <ValidationMessage For="@(() => _companyModel.PropulsionType)" class="text-red-500 text-sm mt-1" />
             </div>
         </div>
@@ -237,7 +255,13 @@ else
                 <i class="fas fa-car-side mr-1"></i>
                 Brand
             </label>
-            <InputText @bind-Value="_model.Brand" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <InputSelect @bind-Value="_model.Brand" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none">
+                <option value="">Select brand</option>
+                @foreach (var brand in VehicleBrands)
+                {
+                    <option value="@brand">@brand</option>
+                }
+            </InputSelect>
             <ValidationMessage For="@(() => _model.Brand)" class="text-red-500 text-sm mt-1" />
         </div>
         <div>
@@ -245,7 +269,13 @@ else
                 <i class="fas fa-tag mr-1"></i>
                 Type
             </label>
-            <InputText @bind-Value="_model.Type" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <InputSelect @bind-Value="_model.Type" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none">
+                <option value="">Select type</option>
+                @foreach (var type in VehicleTypes)
+                {
+                    <option value="@type">@type</option>
+                }
+            </InputSelect>
             <ValidationMessage For="@(() => _model.Type)" class="text-red-500 text-sm mt-1" />
         </div>
         <div>
@@ -253,7 +283,13 @@ else
                 <i class="fas fa-gas-pump mr-1"></i>
                 Propulsion Type
             </label>
-            <InputText @bind-Value="_model.PropulsionType" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <InputSelect @bind-Value="_model.PropulsionType" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none">
+                <option value="">Select propulsion</option>
+                @foreach (var propulsion in VehiclePropulsionTypes)
+                {
+                    <option value="@propulsion">@propulsion</option>
+                }
+            </InputSelect>
             <ValidationMessage For="@(() => _model.PropulsionType)" class="text-red-500 text-sm mt-1" />
         </div>
     </div>
@@ -283,6 +319,39 @@ else
     private bool showPassword;
     private bool isSubmitting;
     private string? successMessage;
+
+    private readonly string[] VehicleBrands = new[]
+    {
+        "Tesla", "Ford", "Chevrolet", "Chrysler", "Dodge", "Jeep", "Cadillac",
+        "GMC", "Lincoln", "Buick", "Hummer", "Ram", "Bmw", "MercedesBenz",
+        "Audi", "Volkswagen", "Porsche", "Opel", "Smart", "Maybach", "Peugeot",
+        "Citroen", "Renault", "DS", "Fiat", "AlfaRomeo", "Lancia", "Ferrari",
+        "Lamborghini", "Maserati", "Pagani", "Iveco", "Jaguar", "LandRover",
+        "AstonMartin", "Bentley", "RollsRoyce", "Mini", "Lotus", "MG",
+        "Vauxhall", "Rover", "Seat", "Cupra", "Skoda", "Volvo", "Saab",
+        "Koenigsegg", "Spyker", "DAF", "Dacia", "Rinspeed", "MagyarSuzuki",
+        "Rimac", "Toyota", "Honda", "Nissan", "Mazda", "Subaru", "Suzuki",
+        "Mitsubishi", "Lexus", "Infiniti", "Daihatsu", "Acura", "Hyundai",
+        "Kia", "Genesis", "SsangYong", "Geely", "Chery", "BYD", "Nio",
+        "XPeng", "GreatWall", "Haval", "Aiways", "Hongqi", "LynkAndCo",
+        "Roewe", "Wuling", "Baojun", "Zeekr", "Tata", "Mahindra",
+        "MarutiSuzuki", "AshokLeyland", "Proton", "Perodua", "Tofas", "TOGG",
+        "Lada", "UAZ", "GAZ", "Moskvitch", "Holden", "Troller", "IKA",
+        "Bugatti", "DeTomaso", "Fisker", "Lucid", "Polestar", "Canoo",
+        "Rivian", "Bollinger", "FaradayFuture", "Aptera", "Scania", "MAN",
+        "Kamaz", "Isuzu", "Hino"
+    };
+
+    private readonly string[] VehicleTypes = new[]
+    {
+        "Car", "Truck", "Motorcycle", "Bus", "Scooter", "Bicycle"
+    };
+
+    private readonly string[] VehiclePropulsionTypes = new[]
+    {
+        "Gasoline", "Diesel", "Electric", "Hybrid", "Lpg", "NaturalGas",
+        "Hydrogen"
+    };
 
     [Inject] private HttpClient Http { get; set; } = default!;
 
