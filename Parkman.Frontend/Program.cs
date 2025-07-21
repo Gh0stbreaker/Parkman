@@ -36,16 +36,10 @@ public class Program
         {
             var handler = new HttpClientHandler
             {
-                UseCookies = true
+             
             };
 
-            var browserHandler = new WebAssemblyHttpHandler
-            {
-                Credentials = FetchCredentials.Include
-                
-            };
-
-            handler.InnerHandler = browserHandler;
+          
             return new HttpClient(handler) { BaseAddress = new Uri(apiBaseAddress) };
         });
 
