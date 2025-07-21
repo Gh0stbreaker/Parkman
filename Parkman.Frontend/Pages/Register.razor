@@ -3,330 +3,263 @@
 @using System.ComponentModel.DataAnnotations
 @using Blazorise
 
-<Div Margin="Margin.IsAuto.OnX" Width="Width.Is75" class="position-relative">
+<div class="container py-4 position-relative">
+    <h3 class="text-center mb-4 h4">Create an account</h3>
 
-<Heading Size="HeadingSize.Is2" Margin="Margin.Is3.FromBottom" TextAlignment="TextAlignment.Center">
-    Create an account
-</Heading>
+    <ul class="nav nav-pills justify-content-center mb-4">
+        <li class="nav-item">
+            <button type="button" class="nav-link @(registerAsCompany ? string.Empty : "active")" @onclick="() => registerAsCompany = false">Person</button>
+        </li>
+        <li class="nav-item">
+            <button type="button" class="nav-link @(registerAsCompany ? "active" : string.Empty)" @onclick="() => registerAsCompany = true">Company</button>
+        </li>
+    </ul>
 
-<div class="mb-3" >
-    <button class="btn btn-primary me-2" @onclick="() => registerAsCompany = false">Person</button>
-    <button class="btn btn-secondary" @onclick="() => registerAsCompany = true">Company</button>
-</div>
+    <div class="tab-content">
+        <div class="tab-pane fade @(registerAsCompany ? string.Empty : "show active")">
+            <EditForm Model="_model" OnValidSubmit="RegisterUser" class="card p-4 mx-auto" style="max-width: 768px;">
+                <DataAnnotationsValidator />
+                <Forms.ValidationSummary />
 
-<Card Shadow="Shadow.Default">
-    <CardBody>
-
-@if (registerAsCompany)
-{
-    <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="@($"card p-4 mx-auto form-section {(registerAsCompany ? "show" : "")}")" style="max-width: 768px;">
-        <DataAnnotationsValidator />
-        <Forms.ValidationSummary />
-
-        <h4 class="mb-3" >Account Information</h4>
-        <div class="mb-3 registration-grid" >
-            <div>
-                <label class="form-label" >
-                    Email
-                </label>
-                <InputText @bind-Value="_companyModel.Email" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.Email)" class="text-danger small mt-1" />
-            </div>
-            <div>
-                <label class="form-label" >
-                    Password
-                </label>
-                <div class="mb-3" >
-                    <InputText @bind-Value="_companyModel.Password" type="@(showPassword ? "text" : "password")" class="form-control" />
-                    <button type="button" class="btn btn-link btn-sm ms-2" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+                <h5 class="mb-3">Account Information</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <InputText @bind-Value="_model.Email" class="form-control" />
+                        <ValidationMessage For="@(() => _model.Email)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <InputText @bind-Value="_model.Password" type="@(showPassword ? "text" : "password")" class="form-control" />
+                            <button type="button" class="btn btn-outline-secondary" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+                        </div>
+                        <ValidationMessage For="@(() => _model.Password)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm Password</label>
+                        <InputText @bind-Value="_model.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="form-control" />
+                        <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-danger small mt-1" />
+                    </div>
                 </div>
-                <ValidationMessage For="@(() => _companyModel.Password)" class="text-danger small mt-1" />
-            </div>
-            <div class="mb-3" >
-                <label class="form-label" >
-                    Confirm Password
-                </label>
-                <InputText @bind-Value="_companyModel.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.ConfirmPassword)" class="text-danger small mt-1" />
-            </div>
+
+                <h5 class="mb-3">Personal Details</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        <InputText @bind-Value="_model.FirstName" class="form-control" />
+                        <ValidationMessage For="@(() => _model.FirstName)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        <InputText @bind-Value="_model.LastName" class="form-control" />
+                        <ValidationMessage For="@(() => _model.LastName)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Date of Birth</label>
+                        <InputDate @bind-Value="_model.DateOfBirth" class="form-control" />
+                        <ValidationMessage For="@(() => _model.DateOfBirth)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <InputText @bind-Value="_model.PhoneNumber" class="form-control" />
+                        <ValidationMessage For="@(() => _model.PhoneNumber)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Address</label>
+                        <InputText @bind-Value="_model.Address" class="form-control" />
+                        <ValidationMessage For="@(() => _model.Address)" class="text-danger small mt-1" />
+                    </div>
+                </div>
+
+                <h5 class="mb-3">Vehicle Information</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">License Plate</label>
+                        <InputText @bind-Value="_model.LicensePlate" class="form-control" />
+                        <ValidationMessage For="@(() => _model.LicensePlate)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Brand</label>
+                        <InputSelect @bind-Value="_model.Brand" class="form-select">
+                            <option value="">Select brand</option>
+                            @foreach (var brand in VehicleBrands)
+                            {
+                                <option value="@brand">@brand</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _model.Brand)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Type</label>
+                        <InputSelect @bind-Value="_model.Type" class="form-select">
+                            <option value="">Select type</option>
+                            @foreach (var type in VehicleTypes)
+                            {
+                                <option value="@type">@type</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _model.Type)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Propulsion Type</label>
+                        <InputSelect @bind-Value="_model.PropulsionType" class="form-select">
+                            <option value="">Select propulsion</option>
+                            @foreach (var propulsion in VehiclePropulsionTypes)
+                            {
+                                <option value="@propulsion">@propulsion</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _model.PropulsionType)" class="text-danger small mt-1" />
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <InputCheckbox @bind-Value="_model.Shareable" class="form-check-input" />
+                    <label class="form-check-label">Shareable</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" disabled="@isSubmitting">
+                    @(isSubmitting ? "Registering..." : "Register")
+                </button>
+            </EditForm>
         </div>
 
-        <h4 class="mb-3" >Company Details</h4>
-        <div class="mb-3 registration-grid" >
-            <div>
-                <label class="form-label">
-                    <i class="fas fa-building me-1"></i>
-                    Company Name
-                </label>
-                <InputText @bind-Value="_companyModel.CompanyName" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.CompanyName)" class="text-danger small mt-1" />
-            </div>
-            <div>
-                <label class="form-label" >
-                    IČO
-                </label>
-                <InputText @bind-Value="_companyModel.Ico" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.Ico)" class="text-danger small mt-1" />
-            </div>
-            <div>
-                <label class="form-label" >
-                    DIČ
-                </label>
-                <InputText @bind-Value="_companyModel.Dic" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.Dic)" class="text-danger small mt-1" />
-            </div>
-            <div>
-                <label class="form-label" >
-                    Contact Name
-                </label>
-                <InputText @bind-Value="_companyModel.ContactPersonName" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.ContactPersonName)" class="text-danger small mt-1" />
-            </div>
-            <div>
-                <label class="form-label" >
-                    Contact Email
-                </label>
-                <InputText @bind-Value="_companyModel.ContactEmail" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.ContactEmail)" class="text-danger small mt-1" />
-            </div>
-            <div>
-                <label class="form-label" >
-                    Phone Number
-                </label>
-                <InputText @bind-Value="_companyModel.PhoneNumber" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.PhoneNumber)" class="text-danger small mt-1" />
-            </div>
-            <div class="mb-3" >
-                <label class="form-label" >
-                    Billing Address
-                </label>
-                <InputText @bind-Value="_companyModel.BillingAddress" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.BillingAddress)" class="text-danger small mt-1" />
-            </div>
-        </div>
+        <div class="tab-pane fade @(registerAsCompany ? "show active" : string.Empty)">
+            <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="card p-4 mx-auto" style="max-width: 768px;">
+                <DataAnnotationsValidator />
+                <Forms.ValidationSummary />
 
-        <h4 class="mb-3" >Vehicle Information</h4>
-        <div class="mb-3 registration-grid" >
-            <div>
-                <label class="form-label" >
-                    License Plate
-                </label>
-                <InputText @bind-Value="_companyModel.LicensePlate" class="form-control" />
-                <ValidationMessage For="@(() => _companyModel.LicensePlate)" class="text-danger small mt-1" />
-            </div>
-            <div>
-                <label class="form-label" >
-                    Brand
-                </label>
-                <InputSelect @bind-Value="_companyModel.Brand" class="form-control" >
-                    <option value="">Select brand</option>
-                    @foreach (var brand in VehicleBrands)
-                    {
-                        <option value="@brand">@brand</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => _companyModel.Brand)" class="text-danger small mt-1" />
-            </div>
-            <div>
-                <label class="form-label" >
-                    Type
-                </label>
-                <InputSelect @bind-Value="_companyModel.Type" class="form-control" >
-                    <option value="">Select type</option>
-                    @foreach (var type in VehicleTypes)
-                    {
-                        <option value="@type">@type</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => _companyModel.Type)" class="text-danger small mt-1" />
-            </div>
-            <div>
-                <label class="form-label" >
-                    Propulsion Type
-                </label>
-                <InputSelect @bind-Value="_companyModel.PropulsionType" class="form-control" >
-                    <option value="">Select propulsion</option>
-                    @foreach (var propulsion in VehiclePropulsionTypes)
-                    {
-                        <option value="@propulsion">@propulsion</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => _companyModel.PropulsionType)" class="text-danger small mt-1" />
-            </div>
-        </div>
+                <h5 class="mb-3">Account Information</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <InputText @bind-Value="_companyModel.Email" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.Email)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <InputText @bind-Value="_companyModel.Password" type="@(showPassword ? "text" : "password")" class="form-control" />
+                            <button type="button" class="btn btn-outline-secondary" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+                        </div>
+                        <ValidationMessage For="@(() => _companyModel.Password)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm Password</label>
+                        <InputText @bind-Value="_companyModel.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.ConfirmPassword)" class="text-danger small mt-1" />
+                    </div>
+                </div>
 
-        <div class="mb-3" >
-            <InputCheckbox @bind-Value="_companyModel.Shareable" class="form-check-input" />
-            <label class="form-check-label" >Shareable</label>
-        </div>
+                <h5 class="mb-3">Company Details</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Company Name</label>
+                        <InputText @bind-Value="_companyModel.CompanyName" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.CompanyName)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">IČO</label>
+                        <InputText @bind-Value="_companyModel.Ico" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.Ico)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">DIČ</label>
+                        <InputText @bind-Value="_companyModel.Dic" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.Dic)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Contact Name</label>
+                        <InputText @bind-Value="_companyModel.ContactPersonName" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.ContactPersonName)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Contact Email</label>
+                        <InputText @bind-Value="_companyModel.ContactEmail" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.ContactEmail)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <InputText @bind-Value="_companyModel.PhoneNumber" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.PhoneNumber)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Billing Address</label>
+                        <InputText @bind-Value="_companyModel.BillingAddress" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.BillingAddress)" class="text-danger small mt-1" />
+                    </div>
+                </div>
 
-        <button type="submit" class="btn btn-primary w-100" disabled="@isSubmitting">
-            @(isSubmitting ? "Registering..." : "Register")
-        </button>
+                <h5 class="mb-3">Vehicle Information</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">License Plate</label>
+                        <InputText @bind-Value="_companyModel.LicensePlate" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.LicensePlate)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Brand</label>
+                        <InputSelect @bind-Value="_companyModel.Brand" class="form-select">
+                            <option value="">Select brand</option>
+                            @foreach (var brand in VehicleBrands)
+                            {
+                                <option value="@brand">@brand</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _companyModel.Brand)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Type</label>
+                        <InputSelect @bind-Value="_companyModel.Type" class="form-select">
+                            <option value="">Select type</option>
+                            @foreach (var type in VehicleTypes)
+                            {
+                                <option value="@type">@type</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _companyModel.Type)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Propulsion Type</label>
+                        <InputSelect @bind-Value="_companyModel.PropulsionType" class="form-select">
+                            <option value="">Select propulsion</option>
+                            @foreach (var propulsion in VehiclePropulsionTypes)
+                            {
+                                <option value="@propulsion">@propulsion</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _companyModel.PropulsionType)" class="text-danger small mt-1" />
+                    </div>
+                </div>
 
-    </EditForm>
-}
-else
-{
-    <EditForm Model="_model" OnValidSubmit="RegisterUser" class="@($"card p-4 mx-auto form-section {(registerAsCompany ? "" : "show")}")" style="max-width: 768px;">
-        <DataAnnotationsValidator />
-        <Forms.ValidationSummary />
+                <div class="form-check mb-3">
+                    <InputCheckbox @bind-Value="_companyModel.Shareable" class="form-check-input" />
+                    <label class="form-check-label">Shareable</label>
+                </div>
 
-    <!-- Account Info -->
-    <h4 class="mb-3" >Account Information</h4>
-    <div class="mb-3 registration-grid" >
-        <div>
-            <label class="form-label" >
-                Email
-            </label>
-            <InputText @bind-Value="_model.Email" class="form-control" />
-            <ValidationMessage For="@(() => _model.Email)" class="text-danger small mt-1" />
-        </div>
-
-        <div>
-            <label class="form-label" >
-                Password
-            </label>
-            <div class="mb-3" >
-                <InputText @bind-Value="_model.Password" type="@(showPassword ? "text" : "password")" class="form-control" />
-                <button type="button" class="btn btn-link btn-sm ms-2" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
-            </div>
-            <ValidationMessage For="@(() => _model.Password)" class="text-danger small mt-1" />
-        </div>
-
-        <div class="mb-3" >
-            <label class="form-label" >
-                Confirm Password
-            </label>
-            <InputText @bind-Value="_model.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="form-control" />
-            <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-danger small mt-1" />
-        </div>
-    </div>
-
-    <!-- Personal Details -->
-    <h4 class="mb-3" >Personal Details</h4>
-    <div class="mb-3 registration-grid" >
-        <div>
-            <label class="form-label" >
-                First Name
-            </label>
-            <InputText @bind-Value="_model.FirstName" class="form-control" />
-            <ValidationMessage For="@(() => _model.FirstName)" class="text-danger small mt-1" />
-        </div>
-        <div>
-            <label class="form-label" >
-                Last Name
-            </label>
-            <InputText @bind-Value="_model.LastName" class="form-control" />
-            <ValidationMessage For="@(() => _model.LastName)" class="text-danger small mt-1" />
-        </div>
-        <div>
-            <label class="form-label" >
-                Date of Birth
-            </label>
-            <InputDate @bind-Value="_model.DateOfBirth" class="form-control mt-1" />
-            <ValidationMessage For="@(() => _model.DateOfBirth)" class="text-danger small mt-1" />
-        </div>
-        <div>
-            <label class="form-label" >
-                Phone Number
-            </label>
-            <InputText @bind-Value="_model.PhoneNumber" class="form-control" />
-            <ValidationMessage For="@(() => _model.PhoneNumber)" class="text-danger small mt-1" />
-        </div>
-        <div class="mb-3" >
-            <label class="form-label" >
-                Address
-            </label>
-            <InputText @bind-Value="_model.Address" class="form-control" />
-            <ValidationMessage For="@(() => _model.Address)" class="text-danger small mt-1" />
-        </div>
-    </div>
-
-    <!-- Vehicle -->
-    <h4 class="mb-3" >Vehicle Information</h4>
-    <div class="mb-3 registration-grid" >
-        <div>
-            <label class="form-label" >
-                License Plate
-            </label>
-            <InputText @bind-Value="_model.LicensePlate" class="form-control" />
-            <ValidationMessage For="@(() => _model.LicensePlate)" class="text-danger small mt-1" />
-        </div>
-        <div>
-            <label class="form-label" >
-                Brand
-            </label>
-            <InputSelect @bind-Value="_model.Brand" class="form-control" >
-                <option value="">Select brand</option>
-                @foreach (var brand in VehicleBrands)
-                {
-                    <option value="@brand">@brand</option>
-                }
-            </InputSelect>
-            <ValidationMessage For="@(() => _model.Brand)" class="text-danger small mt-1" />
-        </div>
-        <div>
-            <label class="form-label" >
-                Type
-            </label>
-            <InputSelect @bind-Value="_model.Type" class="form-control" >
-                <option value="">Select type</option>
-                @foreach (var type in VehicleTypes)
-                {
-                    <option value="@type">@type</option>
-                }
-            </InputSelect>
-            <ValidationMessage For="@(() => _model.Type)" class="text-danger small mt-1" />
-        </div>
-        <div>
-            <label class="form-label" >
-                Propulsion Type
-            </label>
-            <InputSelect @bind-Value="_model.PropulsionType" class="form-control" >
-                <option value="">Select propulsion</option>
-                @foreach (var propulsion in VehiclePropulsionTypes)
-                {
-                    <option value="@propulsion">@propulsion</option>
-                }
-            </InputSelect>
-            <ValidationMessage For="@(() => _model.PropulsionType)" class="text-danger small mt-1" />
+                <button type="submit" class="btn btn-primary w-100" disabled="@isSubmitting">
+                    @(isSubmitting ? "Registering..." : "Register")
+                </button>
+            </EditForm>
         </div>
     </div>
 
-    <!-- Shareable -->
-    <div class="mb-3" >
-        <InputCheckbox @bind-Value="_model.Shareable" class="form-check-input" />
-        <label class="form-check-label" >Shareable</label>
-    </div>
-
-    <!-- Submit -->
-    <button type="submit" class="btn btn-primary w-100" disabled="@isSubmitting">
-        @(isSubmitting ? "Registering..." : "Register")
-    </button>
-
-</EditForm>
-}
-
-    </CardBody>
-</Card>
-
-<Modal @bind-Visible="showSuccessModal" Animation="Animation.Fade" Backdrop="true">
-    <ModalContent>
-        <ModalHeader>
-            <ModalTitle>Registration</ModalTitle>
-            <CloseButton @onclick="() => showSuccessModal = false" />
-        </ModalHeader>
-        <ModalBody>
-            @successMessage
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Primary" @onclick="() => showSuccessModal = false">OK</Button>
-        </ModalFooter>
-    </ModalContent>
-</Modal>
-
-</Div>
+    <Modal @bind-Visible="showSuccessModal" Animation="Animation.Fade" Backdrop="true">
+        <ModalContent>
+            <ModalHeader>
+                <ModalTitle>Registration</ModalTitle>
+                <CloseButton @onclick="() => showSuccessModal = false" />
+            </ModalHeader>
+            <ModalBody>
+                @successMessage
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Primary" @onclick="() => showSuccessModal = false">OK</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+</div>
 
 @code {
     private RegisterWithVehicleRequest _model = new();
