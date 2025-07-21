@@ -2,11 +2,11 @@ using System;
 using System.Net.Http;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Components.Authorization;
 using Parkman.Frontend.Services;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.Bootstrap;
@@ -39,9 +39,10 @@ public class Program
                 UseCookies = true
             };
 
-            var browserHandler = new BrowserHttpHandler
+            var browserHandler = new WebAssemblyHttpHandler
             {
                 Credentials = FetchCredentials.Include
+                
             };
 
             handler.InnerHandler = browserHandler;
