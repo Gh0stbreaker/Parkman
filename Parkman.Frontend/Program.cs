@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Components.Authorization;
 using Parkman.Frontend.Services;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.Bootstrap;
@@ -31,7 +32,21 @@ public class Program
         builder.Services.AddScoped<AuthService>();
 
         var apiBaseAddress = builder.Configuration["ApiBaseAddress"] ?? builder.HostEnvironment.BaseAddress;
-        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
+        builder.Services.AddScoped(sp =>
+        {
+            var handler = new HttpClientHandler
+            {
+                UseCookies = true
+            };
+
+            var browserHandler = new BrowserHttpHandler
+            {
+                Credentials = FetchCredentials.Include
+            };
+
+            handler.InnerHandler = browserHandler;
+            return new HttpClient(handler) { BaseAddress = new Uri(apiBaseAddress) };
+        });
 
         await builder.Build().RunAsync();
     }

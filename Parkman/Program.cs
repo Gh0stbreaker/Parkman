@@ -20,10 +20,9 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("https://localhost:13883") // port frontendu
+        policy.WithOrigins("https://localhost:13883")
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();           // umožní odesílání cookie
+            .AllowAnyMethod();
     });
 });
 
