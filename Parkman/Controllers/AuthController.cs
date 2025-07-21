@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Parkman.Domain.Entities;
 using Parkman.Models;
 
@@ -50,5 +51,13 @@ public class AuthController : ControllerBase
             return Ok();
         }
         return Unauthorized();
+    }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return Ok();
     }
 }
