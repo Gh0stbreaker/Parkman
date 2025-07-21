@@ -13,7 +13,7 @@
 
 @if (registerAsCompany)
 {
-    <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md">
+    <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md grid gap-4">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -179,7 +179,7 @@
 }
 else
 {
-    <EditForm Model="_model" OnValidSubmit="RegisterUser" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md">
+    <EditForm Model="_model" OnValidSubmit="RegisterUser" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md grid gap-4">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
