@@ -85,6 +85,47 @@
             </div>
         </div>
 
+        <h4 class="text-xl font-semibold mt-6 mb-4 text-headline border-b border-muted pb-1">Vehicle Information</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-headline">
+                    <i class="fas fa-car mr-1"></i>
+                    License Plate
+                </label>
+                <InputText @bind-Value="_companyModel.LicensePlate" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.LicensePlate)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-headline">
+                    <i class="fas fa-car-side mr-1"></i>
+                    Brand
+                </label>
+                <InputText @bind-Value="_companyModel.Brand" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.Brand)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-headline">
+                    <i class="fas fa-tag mr-1"></i>
+                    Type
+                </label>
+                <InputText @bind-Value="_companyModel.Type" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.Type)" class="text-red-500 text-sm mt-1" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-headline">
+                    <i class="fas fa-gas-pump mr-1"></i>
+                    Propulsion Type
+                </label>
+                <InputText @bind-Value="_companyModel.PropulsionType" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <ValidationMessage For="@(() => _companyModel.PropulsionType)" class="text-red-500 text-sm mt-1" />
+            </div>
+        </div>
+
+        <div class="flex items-center mt-6 mb-6">
+            <InputCheckbox @bind-Value="_companyModel.Shareable" class="h-4 w-4 text-highlight border-stroke rounded" />
+            <label class="ml-2 block text-sm text-headline">Shareable</label>
+        </div>
+
         <button type="submit" class="w-full bg-highlight text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-tertiary transition duration-200 disabled:opacity-50" disabled="@isSubmitting">
             @(isSubmitting ? "Registering..." : "Register")
         </button>
@@ -274,7 +315,12 @@ else
             ContactPersonName = _companyModel.ContactPersonName,
             ContactEmail = _companyModel.ContactEmail,
             PhoneNumber = _companyModel.PhoneNumber,
-            BillingAddress = _companyModel.BillingAddress
+            BillingAddress = _companyModel.BillingAddress,
+            LicensePlate = _companyModel.LicensePlate,
+            Brand = _companyModel.Brand,
+            Type = _companyModel.Type,
+            PropulsionType = _companyModel.PropulsionType,
+            Shareable = _companyModel.Shareable
         };
 
         var response = await Http.PostAsJsonAsync("api/Registration/company", request);
@@ -359,6 +405,20 @@ else
 
         [Required]
         public string BillingAddress { get; set; } = string.Empty;
+
+        [Required]
+        public string LicensePlate { get; set; } = string.Empty;
+
+        [Required]
+        public string Brand { get; set; } = string.Empty;
+
+        [Required]
+        public string Type { get; set; } = string.Empty;
+
+        [Required]
+        public string PropulsionType { get; set; } = string.Empty;
+
+        public bool Shareable { get; set; }
     }
 
     private class RegisterCompanyRequest
@@ -372,5 +432,10 @@ else
         public string ContactEmail { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string BillingAddress { get; set; } = string.Empty;
+        public string LicensePlate { get; set; } = string.Empty;
+        public string Brand { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
+        public string PropulsionType { get; set; } = string.Empty;
+        public bool Shareable { get; set; }
     }
 }
