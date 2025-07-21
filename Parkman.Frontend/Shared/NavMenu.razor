@@ -1,29 +1,33 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/">Parkman</a>
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-car-front-fill me-1"></i> Parkman
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Přepnout navigaci">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarMain">
+                <!-- Levá strana -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Domů</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/register">Registrace</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Přihlášení</a>
+                        <a class="nav-link" href="/"><i class="bi bi-house-door-fill me-1"></i>Domů</a>
                     </li>
                 </ul>
 
-                <!-- Pravá strana (např. profil, odhlášení) -->
+                <!-- Pravá strana -->
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <!-- Dynamicky např. podle přihlášení -->
-                    <!-- <li class="nav-item"><a class="nav-link" href="/profile">Profil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/logout">Odhlásit se</a></li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">
+                            <i class="bi bi-person-plus-fill me-1"></i>Registrace
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Přihlášení
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
