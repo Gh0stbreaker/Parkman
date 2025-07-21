@@ -66,7 +66,12 @@ public class RegistrationController : ControllerBase
             request.ContactPersonName,
             request.ContactEmail,
             request.PhoneNumber,
-            request.BillingAddress);
+            request.BillingAddress,
+            request.LicensePlate,
+            request.Brand,
+            request.Type,
+            request.PropulsionType,
+            request.Shareable);
 
         if (!result.Succeeded)
         {

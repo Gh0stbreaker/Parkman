@@ -1,3 +1,5 @@
+using Parkman.Domain.Enums;
+
 namespace Parkman.Models;
 
 public class RegisterCompanyRequest
@@ -12,4 +14,10 @@ public class RegisterCompanyRequest
     public string ContactEmail { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public string BillingAddress { get; set; } = string.Empty;
+
+    public string LicensePlate { get; set; } = string.Empty;
+    public VehicleBrand Brand { get; set; }
+    public VehicleType Type { get; set; }
+    public VehiclePropulsionType PropulsionType { get; set; }
+    public bool Shareable { get; set; }
 }
