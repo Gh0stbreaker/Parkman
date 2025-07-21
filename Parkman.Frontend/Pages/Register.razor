@@ -19,7 +19,7 @@
 
 @if (registerAsCompany)
 {
-    <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="card p-4 mx-auto form-section @(registerAsCompany ? "show" : null)" style="max-width: 768px;">
+    <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="@($"card p-4 mx-auto form-section {(registerAsCompany ? "show" : "")}")" style="max-width: 768px;">
         <DataAnnotationsValidator />
         <Forms.ValidationSummary />
 
@@ -168,7 +168,7 @@
 }
 else
 {
-    <EditForm Model="_model" OnValidSubmit="RegisterUser" class="card p-4 mx-auto form-section @(registerAsCompany ? null : "show")" style="max-width: 768px;">
+    <EditForm Model="_model" OnValidSubmit="RegisterUser" class="@($"card p-4 mx-auto form-section {(registerAsCompany ? "" : "show")}")" style="max-width: 768px;">
         <DataAnnotationsValidator />
         <Forms.ValidationSummary />
 
