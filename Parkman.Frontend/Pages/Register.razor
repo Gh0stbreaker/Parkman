@@ -8,10 +8,14 @@
 
     <ul class="nav nav-pills justify-content-center mb-4">
         <li class="nav-item">
-            <button type="button" class="nav-link @(registerAsCompany ? string.Empty : "active")" @onclick="() => registerAsCompany = false">Person</button>
+            <button type="button" class="nav-link @(registerAsCompany ? string.Empty : "active")" @onclick="() => registerAsCompany = false">
+                <i class="bi bi-person-fill me-1"></i>Person
+            </button>
         </li>
         <li class="nav-item">
-            <button type="button" class="nav-link @(registerAsCompany ? "active" : string.Empty)" @onclick="() => registerAsCompany = true">Company</button>
+            <button type="button" class="nav-link @(registerAsCompany ? "active" : string.Empty)" @onclick="() => registerAsCompany = true">
+                <i class="bi bi-building me-1"></i>Company
+            </button>
         </li>
     </ul>
 
