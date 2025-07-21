@@ -1,96 +1,311 @@
 @page "/register"
 @using System.Net.Http.Json
 @using System.ComponentModel.DataAnnotations
+@using Blazorise
 
-<h3 class="text-2xl font-bold mb-4 text-center text-headline">Register</h3>
+<div class="container py-4 position-relative">
+    <h3 class="text-center mb-4 h4">Create an account</h3>
 
-<EditForm Model="_model" OnValidSubmit="RegisterUser" class="max-w-lg mx-auto bg-main p-6 rounded shadow">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+    <ul class="nav nav-pills justify-content-center mb-4">
+        <li class="nav-item">
+            <button type="button" class="nav-link @(registerAsCompany ? string.Empty : "active")" @onclick="() => registerAsCompany = false">
+                <i class="bi bi-person-fill me-1"></i>Person
+            </button>
+        </li>
+        <li class="nav-item">
+            <button type="button" class="nav-link @(registerAsCompany ? "active" : string.Empty)" @onclick="() => registerAsCompany = true">
+                <i class="bi bi-building me-1"></i>Company
+            </button>
+        </li>
+    </ul>
 
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Email</label>
-        <InputText @bind-Value="_model.Email" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.Email)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Password</label>
-        <div class="flex items-center">
-            <InputText @bind-Value="_model.Password" type="@(showPassword ? "text" : "password")" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-            <button type="button" class="ml-2 text-sm text-paragraph" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+    <div class="tab-content">
+        <div class="tab-pane fade @(registerAsCompany ? string.Empty : "show active")">
+            <EditForm Model="_model" OnValidSubmit="RegisterUser" class="card p-4 mx-auto" style="max-width: 768px;">
+                <DataAnnotationsValidator />
+                <Forms.ValidationSummary />
+
+                <h5 class="mb-3">Account Information</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <InputText @bind-Value="_model.Email" class="form-control" />
+                        <ValidationMessage For="@(() => _model.Email)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <InputText @bind-Value="_model.Password" type="@(showPassword ? "text" : "password")" class="form-control" />
+                            <button type="button" class="btn btn-outline-secondary" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+                        </div>
+                        <ValidationMessage For="@(() => _model.Password)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm Password</label>
+                        <InputText @bind-Value="_model.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="form-control" />
+                        <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-danger small mt-1" />
+                    </div>
+                </div>
+
+                <h5 class="mb-3">Personal Details</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        <InputText @bind-Value="_model.FirstName" class="form-control" />
+                        <ValidationMessage For="@(() => _model.FirstName)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        <InputText @bind-Value="_model.LastName" class="form-control" />
+                        <ValidationMessage For="@(() => _model.LastName)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Date of Birth</label>
+                        <InputDate @bind-Value="_model.DateOfBirth" class="form-control" />
+                        <ValidationMessage For="@(() => _model.DateOfBirth)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <InputText @bind-Value="_model.PhoneNumber" class="form-control" />
+                        <ValidationMessage For="@(() => _model.PhoneNumber)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Address</label>
+                        <InputText @bind-Value="_model.Address" class="form-control" />
+                        <ValidationMessage For="@(() => _model.Address)" class="text-danger small mt-1" />
+                    </div>
+                </div>
+
+                <h5 class="mb-3">Vehicle Information</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">License Plate</label>
+                        <InputText @bind-Value="_model.LicensePlate" class="form-control" />
+                        <ValidationMessage For="@(() => _model.LicensePlate)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Brand</label>
+                        <InputSelect @bind-Value="_model.Brand" class="form-select">
+                            <option value="">Select brand</option>
+                            @foreach (var brand in VehicleBrands)
+                            {
+                                <option value="@brand">@brand</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _model.Brand)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Type</label>
+                        <InputSelect @bind-Value="_model.Type" class="form-select">
+                            <option value="">Select type</option>
+                            @foreach (var type in VehicleTypes)
+                            {
+                                <option value="@type">@type</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _model.Type)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Propulsion Type</label>
+                        <InputSelect @bind-Value="_model.PropulsionType" class="form-select">
+                            <option value="">Select propulsion</option>
+                            @foreach (var propulsion in VehiclePropulsionTypes)
+                            {
+                                <option value="@propulsion">@propulsion</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _model.PropulsionType)" class="text-danger small mt-1" />
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <InputCheckbox @bind-Value="_model.Shareable" class="form-check-input" />
+                    <label class="form-check-label">Shareable</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" disabled="@isSubmitting">
+                    @(isSubmitting ? "Registering..." : "Register")
+                </button>
+            </EditForm>
         </div>
-        <ValidationMessage For="@(() => _model.Password)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Confirm password</label>
-        <InputText @bind-Value="_model.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">First name</label>
-        <InputText @bind-Value="_model.FirstName" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.FirstName)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Last name</label>
-        <InputText @bind-Value="_model.LastName" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.LastName)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Date of birth</label>
-        <InputDate @bind-Value="_model.DateOfBirth" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.DateOfBirth)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Phone number</label>
-        <InputText @bind-Value="_model.PhoneNumber" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.PhoneNumber)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Address</label>
-        <InputText @bind-Value="_model.Address" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.Address)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">License plate</label>
-        <InputText @bind-Value="_model.LicensePlate" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.LicensePlate)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Brand</label>
-        <InputText @bind-Value="_model.Brand" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.Brand)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Type</label>
-        <InputText @bind-Value="_model.Type" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.Type)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Propulsion type</label>
-        <InputText @bind-Value="_model.PropulsionType" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.PropulsionType)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="flex items-center mb-6">
-        <InputCheckbox @bind-Value="_model.Shareable" class="h-4 w-4 text-highlight border-stroke rounded" />
-        <label class="ml-2 block text-sm text-headline">Shareable</label>
+
+        <div class="tab-pane fade @(registerAsCompany ? "show active" : string.Empty)">
+            <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="card p-4 mx-auto" style="max-width: 768px;">
+                <DataAnnotationsValidator />
+                <Forms.ValidationSummary />
+
+                <h5 class="mb-3">Account Information</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <InputText @bind-Value="_companyModel.Email" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.Email)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <InputText @bind-Value="_companyModel.Password" type="@(showPassword ? "text" : "password")" class="form-control" />
+                            <button type="button" class="btn btn-outline-secondary" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+                        </div>
+                        <ValidationMessage For="@(() => _companyModel.Password)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm Password</label>
+                        <InputText @bind-Value="_companyModel.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.ConfirmPassword)" class="text-danger small mt-1" />
+                    </div>
+                </div>
+
+                <h5 class="mb-3">Company Details</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Company Name</label>
+                        <InputText @bind-Value="_companyModel.CompanyName" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.CompanyName)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">IČO</label>
+                        <InputText @bind-Value="_companyModel.Ico" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.Ico)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">DIČ</label>
+                        <InputText @bind-Value="_companyModel.Dic" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.Dic)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Contact Name</label>
+                        <InputText @bind-Value="_companyModel.ContactPersonName" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.ContactPersonName)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Contact Email</label>
+                        <InputText @bind-Value="_companyModel.ContactEmail" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.ContactEmail)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <InputText @bind-Value="_companyModel.PhoneNumber" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.PhoneNumber)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Billing Address</label>
+                        <InputText @bind-Value="_companyModel.BillingAddress" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.BillingAddress)" class="text-danger small mt-1" />
+                    </div>
+                </div>
+
+                <h5 class="mb-3">Vehicle Information</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">License Plate</label>
+                        <InputText @bind-Value="_companyModel.LicensePlate" class="form-control" />
+                        <ValidationMessage For="@(() => _companyModel.LicensePlate)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Brand</label>
+                        <InputSelect @bind-Value="_companyModel.Brand" class="form-select">
+                            <option value="">Select brand</option>
+                            @foreach (var brand in VehicleBrands)
+                            {
+                                <option value="@brand">@brand</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _companyModel.Brand)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Type</label>
+                        <InputSelect @bind-Value="_companyModel.Type" class="form-select">
+                            <option value="">Select type</option>
+                            @foreach (var type in VehicleTypes)
+                            {
+                                <option value="@type">@type</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _companyModel.Type)" class="text-danger small mt-1" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Propulsion Type</label>
+                        <InputSelect @bind-Value="_companyModel.PropulsionType" class="form-select">
+                            <option value="">Select propulsion</option>
+                            @foreach (var propulsion in VehiclePropulsionTypes)
+                            {
+                                <option value="@propulsion">@propulsion</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _companyModel.PropulsionType)" class="text-danger small mt-1" />
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <InputCheckbox @bind-Value="_companyModel.Shareable" class="form-check-input" />
+                    <label class="form-check-label">Shareable</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" disabled="@isSubmitting">
+                    @(isSubmitting ? "Registering..." : "Register")
+                </button>
+            </EditForm>
+        </div>
     </div>
 
-    <button type="submit" class="w-full bg-highlight text-button-text py-2 px-4 rounded hover:bg-tertiary disabled:opacity-50" disabled="@isSubmitting">
-        @(isSubmitting ? "Registering..." : "Register")
-    </button>
-    @if (successMessage != null)
-    {
-        <p class="text-green-600 text-center mt-4">@successMessage</p>
-    }
-</EditForm>
+    <Modal @bind-Visible="showSuccessModal" Animation="Animation.Fade" Backdrop="true">
+        <ModalContent>
+            <ModalHeader>
+                <ModalTitle>Registration</ModalTitle>
+                <CloseButton @onclick="() => showSuccessModal = false" />
+            </ModalHeader>
+            <ModalBody>
+                @successMessage
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Primary" @onclick="() => showSuccessModal = false">OK</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+</div>
 
 @code {
     private RegisterWithVehicleRequest _model = new();
-
+    private RegisterCompanyFormModel _companyModel = new();
+    private bool registerAsCompany;
     private bool showPassword;
     private bool isSubmitting;
     private string? successMessage;
+    private bool showSuccessModal;
+
+    private readonly string[] VehicleBrands = new[]
+    {
+        "Tesla", "Ford", "Chevrolet", "Chrysler", "Dodge", "Jeep", "Cadillac",
+        "GMC", "Lincoln", "Buick", "Hummer", "Ram", "Bmw", "MercedesBenz",
+        "Audi", "Volkswagen", "Porsche", "Opel", "Smart", "Maybach", "Peugeot",
+        "Citroen", "Renault", "DS", "Fiat", "AlfaRomeo", "Lancia", "Ferrari",
+        "Lamborghini", "Maserati", "Pagani", "Iveco", "Jaguar", "LandRover",
+        "AstonMartin", "Bentley", "RollsRoyce", "Mini", "Lotus", "MG",
+        "Vauxhall", "Rover", "Seat", "Cupra", "Skoda", "Volvo", "Saab",
+        "Koenigsegg", "Spyker", "DAF", "Dacia", "Rinspeed", "MagyarSuzuki",
+        "Rimac", "Toyota", "Honda", "Nissan", "Mazda", "Subaru", "Suzuki",
+        "Mitsubishi", "Lexus", "Infiniti", "Daihatsu", "Acura", "Hyundai",
+        "Kia", "Genesis", "SsangYong", "Geely", "Chery", "BYD", "Nio",
+        "XPeng", "GreatWall", "Haval", "Aiways", "Hongqi", "LynkAndCo",
+        "Roewe", "Wuling", "Baojun", "Zeekr", "Tata", "Mahindra",
+        "MarutiSuzuki", "AshokLeyland", "Proton", "Perodua", "Tofas", "TOGG",
+        "Lada", "UAZ", "GAZ", "Moskvitch", "Holden", "Troller", "IKA",
+        "Bugatti", "DeTomaso", "Fisker", "Lucid", "Polestar", "Canoo",
+        "Rivian", "Bollinger", "FaradayFuture", "Aptera", "Scania", "MAN",
+        "Kamaz", "Isuzu", "Hino"
+    };
+
+    private readonly string[] VehicleTypes = new[]
+    {
+        "Car", "Truck", "Motorcycle", "Bus", "Scooter", "Bicycle"
+    };
+
+    private readonly string[] VehiclePropulsionTypes = new[]
+    {
+        "Gasoline", "Diesel", "Electric", "Hybrid", "Lpg", "NaturalGas",
+        "Hydrogen"
+    };
 
     [Inject] private HttpClient Http { get; set; } = default!;
 
@@ -104,6 +319,41 @@
         {
             successMessage = "Registration successful!";
             _model = new RegisterWithVehicleRequest();
+            showSuccessModal = true;
+        }
+
+        isSubmitting = false;
+    }
+
+    private async Task RegisterCompany()
+    {
+        isSubmitting = true;
+        successMessage = null;
+        var request = new RegisterCompanyRequest
+        {
+            Email = _companyModel.Email,
+            Password = _companyModel.Password,
+            CompanyName = _companyModel.CompanyName,
+            Ico = _companyModel.Ico,
+            Dic = _companyModel.Dic,
+            ContactPersonName = _companyModel.ContactPersonName,
+            ContactEmail = _companyModel.ContactEmail,
+            PhoneNumber = _companyModel.PhoneNumber,
+            BillingAddress = _companyModel.BillingAddress,
+            LicensePlate = _companyModel.LicensePlate,
+            Brand = _companyModel.Brand,
+            Type = _companyModel.Type,
+            PropulsionType = _companyModel.PropulsionType,
+            Shareable = _companyModel.Shareable
+        };
+
+        var response = await Http.PostAsJsonAsync("api/Registration/company", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            successMessage = "Registration successful!";
+            _companyModel = new RegisterCompanyFormModel();
+            showSuccessModal = true;
         }
 
         isSubmitting = false;
@@ -147,6 +397,70 @@
         [Required]
         public string PropulsionType { get; set; } = string.Empty;
 
+        public bool Shareable { get; set; }
+    }
+
+    public class RegisterCompanyFormModel
+    {
+        [Required, EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
+
+        [Required, Compare(nameof(Password))]
+        public string ConfirmPassword { get; set; } = string.Empty;
+
+        [Required]
+        public string CompanyName { get; set; } = string.Empty;
+
+        [Required]
+        public string Ico { get; set; } = string.Empty;
+
+        public string Dic { get; set; } = string.Empty;
+
+        [Required]
+        public string ContactPersonName { get; set; } = string.Empty;
+
+        [Required, EmailAddress]
+        public string ContactEmail { get; set; } = string.Empty;
+
+        [Required, Phone]
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        [Required]
+        public string BillingAddress { get; set; } = string.Empty;
+
+        [Required]
+        public string LicensePlate { get; set; } = string.Empty;
+
+        [Required]
+        public string Brand { get; set; } = string.Empty;
+
+        [Required]
+        public string Type { get; set; } = string.Empty;
+
+        [Required]
+        public string PropulsionType { get; set; } = string.Empty;
+
+        public bool Shareable { get; set; }
+    }
+
+    private class RegisterCompanyRequest
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string CompanyName { get; set; } = string.Empty;
+        public string Ico { get; set; } = string.Empty;
+        public string Dic { get; set; } = string.Empty;
+        public string ContactPersonName { get; set; } = string.Empty;
+        public string ContactEmail { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+        public string BillingAddress { get; set; } = string.Empty;
+        public string LicensePlate { get; set; } = string.Empty;
+        public string Brand { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
+        public string PropulsionType { get; set; } = string.Empty;
         public bool Shareable { get; set; }
     }
 }
