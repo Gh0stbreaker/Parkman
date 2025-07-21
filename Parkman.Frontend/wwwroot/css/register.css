@@ -15,21 +15,3 @@
     transition: opacity 0.2s ease;
 }
 
-.registration-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-}
-
-.form-section {
-    display: none;
-    opacity: 0;
-    transform: translateY(15px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.form-section.show {
-    display: block;
-    opacity: 1;
-    transform: none;
-}
