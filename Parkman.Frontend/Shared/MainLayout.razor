@@ -1,8 +1,9 @@
 @inherits LayoutComponentBase
 
-<div class="main">
+<div class="main flex flex-col min-h-screen">
     <NavMenu />
-    <div class="content">
+    <div class="content flex-grow">
         @Body
     </div>
+    <Footer />
 </div>
