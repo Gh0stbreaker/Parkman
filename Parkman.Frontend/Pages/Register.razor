@@ -4,81 +4,101 @@
 
 <h3 class="text-2xl font-bold mb-4 text-center text-headline">Register</h3>
 
-<EditForm Model="_model" OnValidSubmit="RegisterUser" class="max-w-lg mx-auto bg-main p-6 rounded shadow">
+<EditForm Model="_model" OnValidSubmit="RegisterUser" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Email</label>
-        <InputText @bind-Value="_model.Email" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.Email)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Password</label>
-        <div class="flex items-center">
-            <InputText @bind-Value="_model.Password" type="@(showPassword ? "text" : "password")" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-            <button type="button" class="ml-2 text-sm text-paragraph" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+    <!-- Úèetní údaje -->
+    <h4 class="text-xl font-semibold mt-6 mb-4 text-headline border-b border-muted pb-1">Account Information</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-headline">Email</label>
+            <InputText @bind-Value="_model.Email" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.Email)" class="text-red-500 text-sm mt-1" />
         </div>
-        <ValidationMessage For="@(() => _model.Password)" class="text-red-500 text-sm mt-1" />
+
+        <div>
+            <label class="block text-sm font-medium text-headline">Password</label>
+            <div class="flex items-center">
+                <InputText @bind-Value="_model.Password" type="@(showPassword ? "text" : "password")" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+                <button type="button" class="ml-2 text-sm text-paragraph" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+            </div>
+            <ValidationMessage For="@(() => _model.Password)" class="text-red-500 text-sm mt-1" />
+        </div>
+
+        <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-headline">Confirm Password</label>
+            <InputText @bind-Value="_model.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-red-500 text-sm mt-1" />
+        </div>
     </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Confirm password</label>
-        <InputText @bind-Value="_model.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-red-500 text-sm mt-1" />
+
+    <!-- Osobní údaje -->
+    <h4 class="text-xl font-semibold mt-6 mb-4 text-headline border-b border-muted pb-1">Personal Details</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-headline">First Name</label>
+            <InputText @bind-Value="_model.FirstName" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.FirstName)" class="text-red-500 text-sm mt-1" />
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-headline">Last Name</label>
+            <InputText @bind-Value="_model.LastName" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.LastName)" class="text-red-500 text-sm mt-1" />
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-headline">Date of Birth</label>
+            <InputDate @bind-Value="_model.DateOfBirth" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.DateOfBirth)" class="text-red-500 text-sm mt-1" />
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-headline">Phone Number</label>
+            <InputText @bind-Value="_model.PhoneNumber" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.PhoneNumber)" class="text-red-500 text-sm mt-1" />
+        </div>
+        <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-headline">Address</label>
+            <InputText @bind-Value="_model.Address" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.Address)" class="text-red-500 text-sm mt-1" />
+        </div>
     </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">First name</label>
-        <InputText @bind-Value="_model.FirstName" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.FirstName)" class="text-red-500 text-sm mt-1" />
+
+    <!-- Vozidlo -->
+    <h4 class="text-xl font-semibold mt-6 mb-4 text-headline border-b border-muted pb-1">Vehicle Information</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-headline">License Plate</label>
+            <InputText @bind-Value="_model.LicensePlate" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.LicensePlate)" class="text-red-500 text-sm mt-1" />
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-headline">Brand</label>
+            <InputText @bind-Value="_model.Brand" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.Brand)" class="text-red-500 text-sm mt-1" />
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-headline">Type</label>
+            <InputText @bind-Value="_model.Type" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.Type)" class="text-red-500 text-sm mt-1" />
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-headline">Propulsion Type</label>
+            <InputText @bind-Value="_model.PropulsionType" class="mt-1 block w-full rounded-md border border-stroke shadow-sm focus-visible:ring-2 focus-visible:ring-highlight focus:outline-none" />
+            <ValidationMessage For="@(() => _model.PropulsionType)" class="text-red-500 text-sm mt-1" />
+        </div>
     </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Last name</label>
-        <InputText @bind-Value="_model.LastName" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.LastName)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Date of birth</label>
-        <InputDate @bind-Value="_model.DateOfBirth" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.DateOfBirth)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Phone number</label>
-        <InputText @bind-Value="_model.PhoneNumber" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.PhoneNumber)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Address</label>
-        <InputText @bind-Value="_model.Address" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.Address)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">License plate</label>
-        <InputText @bind-Value="_model.LicensePlate" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.LicensePlate)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Brand</label>
-        <InputText @bind-Value="_model.Brand" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.Brand)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Type</label>
-        <InputText @bind-Value="_model.Type" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.Type)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-headline">Propulsion type</label>
-        <InputText @bind-Value="_model.PropulsionType" class="mt-1 block w-full rounded-md border-stroke shadow-sm focus:border-highlight focus:ring-highlight" />
-        <ValidationMessage For="@(() => _model.PropulsionType)" class="text-red-500 text-sm mt-1" />
-    </div>
-    <div class="flex items-center mb-6">
+
+    <!-- Shareable -->
+    <div class="flex items-center mt-6 mb-6">
         <InputCheckbox @bind-Value="_model.Shareable" class="h-4 w-4 text-highlight border-stroke rounded" />
         <label class="ml-2 block text-sm text-headline">Shareable</label>
     </div>
 
-    <button type="submit" class="w-full bg-highlight text-button-text py-2 px-4 rounded hover:bg-tertiary disabled:opacity-50" disabled="@isSubmitting">
+    <!-- Submit -->
+    <button type="submit" class="w-full bg-highlight text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-tertiary transition duration-200 disabled:opacity-50" disabled="@isSubmitting">
         @(isSubmitting ? "Registering..." : "Register")
     </button>
+
     @if (successMessage != null)
     {
         <p class="text-green-600 text-center mt-4">@successMessage</p>
@@ -87,7 +107,6 @@
 
 @code {
     private RegisterWithVehicleRequest _model = new();
-
     private bool showPassword;
     private bool isSubmitting;
     private string? successMessage;
