@@ -3,6 +3,8 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Components.Authorization;
+using Parkman.Frontend.Services;
 using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.Bootstrap;
@@ -22,6 +24,11 @@ public class Program
             .AddBlazorise(options => { options.Immediate = true; })
             .AddBootstrapProviders()
             .AddBootstrapIcons();
+
+        builder.Services.AddAuthorizationCore();
+        builder.Services.AddScoped<ApiAuthenticationStateProvider>();
+        builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<ApiAuthenticationStateProvider>());
+        builder.Services.AddScoped<AuthService>();
 
         var apiBaseAddress = builder.Configuration["ApiBaseAddress"] ?? builder.HostEnvironment.BaseAddress;
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });

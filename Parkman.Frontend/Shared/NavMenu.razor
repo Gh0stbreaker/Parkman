@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@using Parkman.Frontend.Services
+@implements IDisposable
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container-fluid">
@@ -18,23 +21,65 @@
 
                 <!-- Pravá strana -->
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">
-                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/register">
-                            <i class="bi bi-person-plus-fill me-1"></i>Registrace
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">
-                            <i class="bi bi-box-arrow-in-right me-1"></i>Přihlášení
-                        </a>
-                    </li>
+                    @if (isLoggedIn)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">
+                                <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="" @onclick="Logout">
+                                <i class="bi bi-box-arrow-right me-1"></i>Logout
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">
+                                <i class="bi bi-person-plus-fill me-1"></i>Registrace
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Přihlášení
+                            </a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
     </nav>
 </header>
+
+@code {
+    [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+    [Inject] private AuthService Auth { get; set; } = default!;
+
+    private bool isLoggedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationStateProvider.AuthenticationStateChanged += AuthStateChanged;
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isLoggedIn = state.User.Identity?.IsAuthenticated ?? false;
+    }
+
+    private async void AuthStateChanged(Task<AuthenticationState> task)
+    {
+        var state = await task;
+        isLoggedIn = state.User.Identity?.IsAuthenticated ?? false;
+        StateHasChanged();
+    }
+
+    private async Task Logout()
+    {
+        await Auth.Logout();
+    }
+
+    public void Dispose()
+    {
+        AuthenticationStateProvider.AuthenticationStateChanged -= AuthStateChanged;
+    }
+}
