@@ -3,7 +3,7 @@
 @using System.ComponentModel.DataAnnotations
 @using Blazorise
 
-<Div Margin="Margin.IsAuto.OnX" Width="Width.Is75">
+<Div Margin="Margin.IsAuto.OnX" Width="Width.Is75" class="position-relative">
 
 <Heading Size="HeadingSize.Is2" Margin="Margin.Is3.FromBottom" TextAlignment="TextAlignment.Center">
     Create an account
@@ -19,12 +19,12 @@
 
 @if (registerAsCompany)
 {
-    <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="card p-4 mx-auto" style="max-width: 768px;">
+    <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="card p-4 mx-auto form-section @(registerAsCompany ? "show" : null)" style="max-width: 768px;">
         <DataAnnotationsValidator />
         <Forms.ValidationSummary />
 
         <h4 class="mb-3" >Account Information</h4>
-        <div class="mb-3" >
+        <div class="mb-3 registration-grid" >
             <div>
                 <label class="form-label" >
                     Email
@@ -52,7 +52,7 @@
         </div>
 
         <h4 class="mb-3" >Company Details</h4>
-        <div class="mb-3" >
+        <div class="mb-3 registration-grid" >
             <div>
                 <label class="form-label">
                     <i class="fas fa-building me-1"></i>
@@ -106,7 +106,7 @@
         </div>
 
         <h4 class="mb-3" >Vehicle Information</h4>
-        <div class="mb-3" >
+        <div class="mb-3 registration-grid" >
             <div>
                 <label class="form-label" >
                     License Plate
@@ -164,21 +164,17 @@
             @(isSubmitting ? "Registering..." : "Register")
         </button>
 
-        @if (successMessage != null)
-        {
-            <p class="alert alert-success" >@successMessage</p>
-        }
     </EditForm>
 }
 else
 {
-    <EditForm Model="_model" OnValidSubmit="RegisterUser" class="card p-4 mx-auto" style="max-width: 768px;">
+    <EditForm Model="_model" OnValidSubmit="RegisterUser" class="card p-4 mx-auto form-section @(registerAsCompany ? null : "show")" style="max-width: 768px;">
         <DataAnnotationsValidator />
         <Forms.ValidationSummary />
 
-    <!-- Úèetní údaje -->
+    <!-- Account Info -->
     <h4 class="mb-3" >Account Information</h4>
-    <div class="mb-3" >
+    <div class="mb-3 registration-grid" >
         <div>
             <label class="form-label" >
                 Email
@@ -207,9 +203,9 @@ else
         </div>
     </div>
 
-    <!-- Osobní údaje -->
+    <!-- Personal Details -->
     <h4 class="mb-3" >Personal Details</h4>
-    <div class="mb-3" >
+    <div class="mb-3 registration-grid" >
         <div>
             <label class="form-label" >
                 First Name
@@ -247,9 +243,9 @@ else
         </div>
     </div>
 
-    <!-- Vozidlo -->
+    <!-- Vehicle -->
     <h4 class="mb-3" >Vehicle Information</h4>
-    <div class="mb-3" >
+    <div class="mb-3 registration-grid" >
         <div>
             <label class="form-label" >
                 License Plate
@@ -309,17 +305,26 @@ else
         @(isSubmitting ? "Registering..." : "Register")
     </button>
 
-
-    @if (successMessage != null)
-    {
-        <p class="alert alert-success" >@successMessage</p>
-    }
-
 </EditForm>
 }
 
     </CardBody>
 </Card>
+
+<Modal @bind-Visible="showSuccessModal" Animation="Animation.Fade" Backdrop="true">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Registration</ModalTitle>
+            <CloseButton @onclick="() => showSuccessModal = false" />
+        </ModalHeader>
+        <ModalBody>
+            @successMessage
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Primary" @onclick="() => showSuccessModal = false">OK</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
 
 </Div>
 
@@ -330,6 +335,7 @@ else
     private bool showPassword;
     private bool isSubmitting;
     private string? successMessage;
+    private bool showSuccessModal;
 
     private readonly string[] VehicleBrands = new[]
     {
@@ -376,6 +382,7 @@ else
         {
             successMessage = "Registration successful!";
             _model = new RegisterWithVehicleRequest();
+            showSuccessModal = true;
         }
 
         isSubmitting = false;
@@ -409,6 +416,7 @@ else
         {
             successMessage = "Registration successful!";
             _companyModel = new RegisterCompanyFormModel();
+            showSuccessModal = true;
         }
 
         isSubmitting = false;

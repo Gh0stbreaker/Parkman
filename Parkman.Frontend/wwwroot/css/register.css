@@ -1,0 +1,35 @@
+.fade-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+.fade-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.fade-leave {
+    opacity: 1;
+}
+.fade-leave-active {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.registration-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.form-section {
+    display: none;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.form-section.show {
+    display: block;
+    opacity: 1;
+    transform: none;
+}
