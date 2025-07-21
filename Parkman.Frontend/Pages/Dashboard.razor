@@ -1,0 +1,76 @@
+@page "/dashboard"
+@using System.Net.Http.Json
+
+<h3 class="mb-4">Dashboard</h3>
+
+<div class="mb-3">
+    <h5>User Profile</h5>
+    @if (profile == null)
+    {
+        <p>Loading profile...</p>
+    }
+    else
+    {
+        <div class="card p-3">
+            <p><strong>Email:</strong> @profile.Email</p>
+            <p><strong>Name:</strong> @profile.FirstName @profile.LastName</p>
+        </div>
+    }
+</div>
+
+<div>
+    <h5>Your Reservations</h5>
+    @if (reservations == null)
+    {
+        <p>Loading reservations...</p>
+    }
+    else if (!reservations.Any())
+    {
+        <p>No reservations yet.</p>
+    }
+    else
+    {
+        <ul class="list-group mb-3">
+            @foreach (var r in reservations)
+            {
+                <li class="list-group-item">
+                    <span>@r.StartTime.ToString("g") - @r.EndTime.ToString("g")</span>
+                </li>
+            }
+        </ul>
+    }
+    <button class="btn btn-primary" @onclick="CreateReservation">Create Reservation</button>
+</div>
+
+@code {
+    private UserProfile? profile;
+    private List<ReservationDto>? reservations;
+
+    [Inject] private HttpClient Http { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        profile = await Http.GetFromJsonAsync<UserProfile>("api/profile");
+        reservations = await Http.GetFromJsonAsync<List<ReservationDto>>("api/reservations");
+    }
+
+    private async Task CreateReservation()
+    {
+        // Placeholder call
+        await Http.PostAsync("api/reservations", null);
+        reservations = await Http.GetFromJsonAsync<List<ReservationDto>>("api/reservations");
+    }
+
+    private class UserProfile
+    {
+        public string Email { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+    }
+
+    private class ReservationDto
+    {
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+    }
+}
