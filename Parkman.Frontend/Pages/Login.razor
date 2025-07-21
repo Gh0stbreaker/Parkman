@@ -54,7 +54,7 @@
         var response = await Http.PostAsJsonAsync("api/auth/login", _model);
         if (response.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("/dashboard");
         }
         else
         {
