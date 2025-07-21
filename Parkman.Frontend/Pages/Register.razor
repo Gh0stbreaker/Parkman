@@ -2,6 +2,7 @@
 @using System.Net.Http.Json
 @using System.ComponentModel.DataAnnotations
 @using Blazorise
+@using Forms = Microsoft.AspNetCore.Components.Forms
 
 <Div Margin="Margin.IsAuto.OnX" Width="Width.Is75">
 
@@ -21,7 +22,7 @@
 {
     <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md grid gap-4">
         <DataAnnotationsValidator />
-        <ValidationSummary />
+        <Forms.ValidationSummary />
 
         <h4 class="text-xl font-semibold mt-6 mb-4 text-headline border-b border-muted pb-1">Account Information</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -187,7 +188,7 @@ else
 {
     <EditForm Model="_model" OnValidSubmit="RegisterUser" class="max-w-3xl mx-auto bg-main p-6 rounded-xl shadow-md grid gap-4">
         <DataAnnotationsValidator />
-        <ValidationSummary />
+        <Forms.ValidationSummary />
 
     <!-- Úèetní údaje -->
     <h4 class="text-xl font-semibold mt-6 mb-4 text-headline border-b border-muted pb-1">Account Information</h4>
