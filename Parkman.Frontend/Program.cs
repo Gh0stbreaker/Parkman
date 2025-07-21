@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Blazorise;
-using Blazorise.Bootstrap5;
+using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 
 namespace Parkman.Frontend;
@@ -20,7 +20,7 @@ public class Program
 
         builder.Services
             .AddBlazorise(options => { options.Immediate = true; })
-            .AddBootstrap5Providers()
+            .AddBootstrapProviders()
             .AddFontAwesomeIcons();
 
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
