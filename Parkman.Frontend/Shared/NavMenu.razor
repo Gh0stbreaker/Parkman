@@ -1,5 +1,6 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using Parkman.Frontend.Services
+@using System.Net.Http.Json
 @implements IDisposable
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
@@ -27,6 +28,22 @@
                             <a class="nav-link" href="/dashboard">
                                 <i class="bi bi-speedometer2 me-1"></i>Dashboard
                             </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-1"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                @if (profile != null)
+                                {
+                                    <li><span class="dropdown-item-text fw-bold">@profile.FirstName @profile.LastName</span></li>
+                                    <li><span class="dropdown-item-text text-muted">@profile.Email</span></li>
+                                }
+                                else
+                                {
+                                    <li><span class="dropdown-item-text">Loading...</span></li>
+                                }
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="" @onclick="Logout">
@@ -56,26 +73,59 @@
 @code {
     [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
     [Inject] private AuthService Auth { get; set; } = default!;
+    [Inject] private HttpClient Http { get; set; } = default!;
 
     private bool isLoggedIn;
+    private ProfileDto? profile;
 
     protected override async Task OnInitializedAsync()
     {
         AuthenticationStateProvider.AuthenticationStateChanged += AuthStateChanged;
         var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         isLoggedIn = state.User.Identity?.IsAuthenticated ?? false;
+        if (isLoggedIn)
+        {
+            await LoadProfile();
+        }
     }
 
     private async void AuthStateChanged(Task<AuthenticationState> task)
     {
         var state = await task;
         isLoggedIn = state.User.Identity?.IsAuthenticated ?? false;
+        if (isLoggedIn)
+        {
+            await LoadProfile();
+        }
+        else
+        {
+            profile = null;
+        }
         StateHasChanged();
     }
 
     private async Task Logout()
     {
         await Auth.Logout();
+    }
+
+    private async Task LoadProfile()
+    {
+        try
+        {
+            profile = await Http.GetFromJsonAsync<ProfileDto>("api/user/profile");
+        }
+        catch
+        {
+            profile = null;
+        }
+    }
+
+    private class ProfileDto
+    {
+        public string Email { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
     }
 
     public void Dispose()
