@@ -3,11 +3,12 @@
 @using System.ComponentModel.DataAnnotations
 @using Blazorise
 @using Parkman.Frontend.Services
+@using Microsoft.AspNetCore.Components.Forms
 
 <div class="container py-4">
     <h3 class="text-center mb-4 h4">Login</h3>
 
-    <EditForm Model="_model" OnValidSubmit="HandleLogin" class="col-md-6 mx-auto card p-4">
+    <EditForm EditContext="_editContext" OnValidSubmit="HandleLogin" class="col-md-6 mx-auto card p-4">
         <DataAnnotationsValidator />
         <Forms.ValidationSummary />
         <div class="mb-3">
@@ -41,6 +42,7 @@
 
 @code {
     private LoginFormModel _model = new();
+    private EditContext _editContext = default!;
     private bool showPassword;
     private bool isSubmitting;
     private string? errorMessage;
@@ -48,18 +50,23 @@
     [Inject] private AuthService Auth { get; set; } = default!;
     [Inject] private NavigationManager Navigation { get; set; } = default!;
 
+    protected override void OnInitialized()
+    {
+        _editContext = new EditContext(_model);
+    }
+
     private async Task HandleLogin()
     {
         isSubmitting = true;
         errorMessage = null;
-        var success = await Auth.Login(_model.Email, _model.Password);
-        if (success)
+        var result = await Auth.Login(_model.Email, _model.Password);
+        if (result.Success)
         {
             Navigation.NavigateTo("/dashboard");
         }
         else
         {
-            errorMessage = "Invalid email or password.";
+            errorMessage = result.Error;
         }
         isSubmitting = false;
     }

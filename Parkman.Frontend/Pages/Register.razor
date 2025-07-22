@@ -2,6 +2,7 @@
 @using System.Net.Http.Json
 @using System.ComponentModel.DataAnnotations
 @using Blazorise
+@using Microsoft.AspNetCore.Components.Forms
 
 <div class="container py-4 position-relative">
     <h3 class="text-center mb-4 h4">Create an account</h3>
@@ -21,7 +22,7 @@
 
     <div class="tab-content">
         <div class="tab-pane fade @(registerAsCompany ? string.Empty : "show active")">
-            <EditForm Model="_model" OnValidSubmit="RegisterUser" class="card p-4 mx-auto" style="max-width: 768px;">
+            <EditForm EditContext="_userEditContext" OnValidSubmit="RegisterUser" class="card p-4 mx-auto" style="max-width: 768px;">
                 <DataAnnotationsValidator />
                 <Forms.ValidationSummary />
 
@@ -130,7 +131,7 @@
         </div>
 
         <div class="tab-pane fade @(registerAsCompany ? "show active" : string.Empty)">
-            <EditForm Model="_companyModel" OnValidSubmit="RegisterCompany" class="card p-4 mx-auto" style="max-width: 768px;">
+            <EditForm EditContext="_companyEditContext" OnValidSubmit="RegisterCompany" class="card p-4 mx-auto" style="max-width: 768px;">
                 <DataAnnotationsValidator />
                 <Forms.ValidationSummary />
 
@@ -268,6 +269,10 @@
 @code {
     private RegisterWithVehicleRequest _model = new();
     private RegisterCompanyFormModel _companyModel = new();
+    private EditContext _userEditContext = default!;
+    private ValidationMessageStore _userMessageStore = default!;
+    private EditContext _companyEditContext = default!;
+    private ValidationMessageStore _companyMessageStore = default!;
     private bool registerAsCompany;
     private bool showPassword;
     private bool isSubmitting;
@@ -309,16 +314,27 @@
 
     [Inject] private HttpClient Http { get; set; } = default!;
 
+    protected override void OnInitialized()
+    {
+        _userEditContext = new EditContext(_model);
+        _userMessageStore = new ValidationMessageStore(_userEditContext);
+        _companyEditContext = new EditContext(_companyModel);
+        _companyMessageStore = new ValidationMessageStore(_companyEditContext);
+    }
+
     private async Task RegisterUser()
     {
         isSubmitting = true;
         successMessage = null;
         var response = await Http.PostAsJsonAsync("api/auth/register", _model);
+        var error = await response.ApplyValidationErrorsAsync(_userEditContext, _userMessageStore);
 
-        if (response.IsSuccessStatusCode)
+        if (error is null)
         {
             successMessage = "Registration successful!";
             _model = new RegisterWithVehicleRequest();
+            _userEditContext = new EditContext(_model);
+            _userMessageStore = new ValidationMessageStore(_userEditContext);
             showSuccessModal = true;
         }
 
@@ -348,11 +364,14 @@
         };
 
         var response = await Http.PostAsJsonAsync("api/auth/register/company", request);
+        var error = await response.ApplyValidationErrorsAsync(_companyEditContext, _companyMessageStore);
 
-        if (response.IsSuccessStatusCode)
+        if (error is null)
         {
             successMessage = "Registration successful!";
             _companyModel = new RegisterCompanyFormModel();
+            _companyEditContext = new EditContext(_companyModel);
+            _companyMessageStore = new ValidationMessageStore(_companyEditContext);
             showSuccessModal = true;
         }
 
