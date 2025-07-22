@@ -37,10 +37,7 @@ public class Program
         {
             var handler = new IncludeCredentialsHandler
             {
-                InnerHandler = new HttpClientHandler
-                {
-                    UseCookies = true
-                }
+                InnerHandler = new HttpClientHandler()
             };
 
             return new HttpClient(handler) { BaseAddress = new Uri(apiBaseAddress) };
