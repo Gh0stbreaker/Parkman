@@ -16,6 +16,13 @@
         <div class="card p-3">
             <p><strong>Email:</strong> @profile.Email</p>
             <p><strong>Name:</strong> @profile.FirstName @profile.LastName</p>
+            @if (!string.IsNullOrWhiteSpace(profile.LicensePlate))
+            {
+                <p><strong>License Plate:</strong> @profile.LicensePlate</p>
+                <p><strong>Brand:</strong> @profile.Brand</p>
+                <p><strong>Type:</strong> @profile.VehicleType</p>
+                <p><strong>Propulsion:</strong> @profile.PropulsionType</p>
+            }
         </div>
     }
 </div>
@@ -52,7 +59,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        profile = await Http.GetFromJsonAsync<UserProfile>("api/profile");
+        profile = await Http.GetFromJsonAsync<UserProfile>("api/user/profile");
         reservations = await Http.GetFromJsonAsync<List<ReservationDto>>("api/reservations");
     }
 
@@ -68,6 +75,10 @@
         public string Email { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public string? LicensePlate { get; set; }
+        public string? Brand { get; set; }
+        public string? VehicleType { get; set; }
+        public string? PropulsionType { get; set; }
     }
 
     private class ReservationDto
