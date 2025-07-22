@@ -313,7 +313,7 @@
     {
         isSubmitting = true;
         successMessage = null;
-        var response = await Http.PostAsJsonAsync("api/Registration", _model);
+        var response = await Http.PostAsJsonAsync("api/auth/register", _model);
 
         if (response.IsSuccessStatusCode)
         {
@@ -347,7 +347,7 @@
             Shareable = _companyModel.Shareable
         };
 
-        var response = await Http.PostAsJsonAsync("api/Registration/company", request);
+        var response = await Http.PostAsJsonAsync("api/auth/register/company", request);
 
         if (response.IsSuccessStatusCode)
         {
