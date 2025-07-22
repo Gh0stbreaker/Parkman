@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Parkman.Frontend.Models;
 
 namespace Parkman.Frontend.Services;
 
@@ -15,15 +16,34 @@ public class AuthService
         _authStateProvider = authStateProvider;
     }
 
-    public async Task<bool> Login(string email, string password)
+    public async Task<(bool Success, string? Error)> Login(string email, string password)
     {
         var response = await _http.PostAsJsonAsync("api/auth/login", new { Email = email, Password = password });
         if (response.IsSuccessStatusCode)
         {
             _authStateProvider.NotifyAuthenticationStateChanged();
-            return true;
+            return (true, null);
         }
-        return false;
+
+        string? message = null;
+        try
+        {
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            message = problem?.Title ?? problem?.Detail;
+        }
+        catch { }
+
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            message = response.StatusCode switch
+            {
+                System.Net.HttpStatusCode.Forbidden => "Access denied.",
+                System.Net.HttpStatusCode.Unauthorized => "Invalid email or password.",
+                _ => "Login failed."
+            };
+        }
+
+        return (false, message);
     }
 
     public async Task Logout()
