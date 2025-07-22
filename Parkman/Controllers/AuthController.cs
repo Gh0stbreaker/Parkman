@@ -112,11 +112,23 @@ public class AuthController : ControllerBase
         if(!ModelState.IsValid)
             return ValidationProblem(ModelState);
 
-        var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
-        if(result.Succeeded)
+        var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, lockoutOnFailure: true);
+
+        if (result.Succeeded)
         {
             return Ok();
         }
+
+        if (result.IsLockedOut)
+        {
+            return Forbid();
+        }
+
+        if (result.IsNotAllowed)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden);
+        }
+
         return Unauthorized();
     }
 
