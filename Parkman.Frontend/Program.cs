@@ -32,14 +32,14 @@ public class Program
         builder.Services.AddScoped<AuthService>();
 
         var apiBaseAddress = builder.Configuration["ApiBaseAddress"] ?? builder.HostEnvironment.BaseAddress;
+        builder.Services.AddScoped<IncludeCredentialsHandler>();
         builder.Services.AddScoped(sp =>
         {
-            var handler = new HttpClientHandler
+            var handler = new IncludeCredentialsHandler
             {
-             
+                InnerHandler = new HttpClientHandler()
             };
 
-          
             return new HttpClient(handler) { BaseAddress = new Uri(apiBaseAddress) };
         });
 

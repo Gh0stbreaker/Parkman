@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Parkman.Domain.Entities;
 using Parkman.Models;
+using Parkman.Infrastructure.Services;
 
 namespace Parkman.Controllers;
 
@@ -12,21 +13,47 @@ public class AuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IUserVehicleRegistrationService _vehicleRegistrationService;
+    private readonly IUserCompanyRegistrationService _companyRegistrationService;
 
-    public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+    public AuthController(
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
+        IUserVehicleRegistrationService vehicleRegistrationService,
+        IUserCompanyRegistrationService companyRegistrationService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _vehicleRegistrationService = vehicleRegistrationService;
+        _companyRegistrationService = companyRegistrationService;
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterRequest request)
+    public async Task<IActionResult> Register(RegisterWithVehicleRequest request)
     {
         if(!ModelState.IsValid)
             return ValidationProblem(ModelState);
 
-        var user = new ApplicationUser { UserName = request.Email, Email = request.Email };
-        var result = await _userManager.CreateAsync(user, request.Password);
+        if(request.Password != request.ConfirmPassword)
+        {
+            ModelState.AddModelError(nameof(request.ConfirmPassword), "Passwords do not match.");
+            return ValidationProblem(ModelState);
+        }
+
+        var result = await _vehicleRegistrationService.RegisterAsync(
+            request.Email,
+            request.Password,
+            request.FirstName,
+            request.LastName,
+            request.DateOfBirth,
+            request.PhoneNumber,
+            request.Address,
+            request.LicensePlate,
+            request.Brand,
+            request.Type,
+            request.PropulsionType,
+            request.Shareable);
+
         if(!result.Succeeded)
         {
             foreach (var error in result.Errors)
@@ -35,7 +62,47 @@ public class AuthController : ControllerBase
             }
             return ValidationProblem(ModelState);
         }
-        await _signInManager.SignInAsync(user, isPersistent: false);
+
+        return Ok();
+    }
+
+    [HttpPost("register/company")]
+    public async Task<IActionResult> RegisterCompany(RegisterCompanyRequest request)
+    {
+        if(!ModelState.IsValid)
+            return ValidationProblem(ModelState);
+
+        if(request.Password != request.ConfirmPassword)
+        {
+            ModelState.AddModelError(nameof(request.ConfirmPassword), "Passwords do not match.");
+            return ValidationProblem(ModelState);
+        }
+
+        var result = await _companyRegistrationService.RegisterAsync(
+            request.Email,
+            request.Password,
+            request.CompanyName,
+            request.Ico,
+            request.Dic,
+            request.ContactPersonName,
+            request.ContactEmail,
+            request.PhoneNumber,
+            request.BillingAddress,
+            request.LicensePlate,
+            request.Brand,
+            request.Type,
+            request.PropulsionType,
+            request.Shareable);
+
+        if(!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+            return ValidationProblem(ModelState);
+        }
+
         return Ok();
     }
 
@@ -45,11 +112,23 @@ public class AuthController : ControllerBase
         if(!ModelState.IsValid)
             return ValidationProblem(ModelState);
 
-        var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
-        if(result.Succeeded)
+        var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, lockoutOnFailure: true);
+
+        if (result.Succeeded)
         {
             return Ok();
         }
+
+        if (result.IsLockedOut)
+        {
+            return Forbid();
+        }
+
+        if (result.IsNotAllowed)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden);
+        }
+
         return Unauthorized();
     }
 

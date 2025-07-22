@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Parkman.Domain.Entities;
 using Parkman.Domain.Enums;
 using Parkman.Infrastructure.Repositories.Entities;
+using Parkman.Infrastructure;
 
 namespace Parkman.Infrastructure.Services;
 
@@ -29,15 +30,18 @@ public class UserCompanyRegistrationService : IUserCompanyRegistrationService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICompanyProfileRepository _companyRepo;
     private readonly IVehicleRepository _vehicleRepo;
+    private readonly ApplicationDbContext _context;
 
     public UserCompanyRegistrationService(
         UserManager<ApplicationUser> userManager,
         ICompanyProfileRepository companyRepo,
-        IVehicleRepository vehicleRepo)
+        IVehicleRepository vehicleRepo,
+        ApplicationDbContext context)
     {
         _userManager = userManager;
         _companyRepo = companyRepo;
         _vehicleRepo = vehicleRepo;
+        _context = context;
     }
 
     public async Task<IdentityResult> RegisterAsync(
@@ -56,21 +60,34 @@ public class UserCompanyRegistrationService : IUserCompanyRegistrationService
         VehiclePropulsionType propulsionType,
         bool shareable = false)
     {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
         var user = new ApplicationUser { UserName = email, Email = email };
         var createResult = await _userManager.CreateAsync(user, password);
         if (!createResult.Succeeded)
         {
+            await transaction.RollbackAsync();
             return createResult;
         }
 
-        var profile = new CompanyProfile(companyName, ico, dic, contactPersonName, contactEmail, phoneNumber, billingAddress);
-        user.SetCompanyProfile(profile);
-        await _companyRepo.AddAsync(profile);
+        try
+        {
+            var profile = new CompanyProfile(companyName, ico, dic, contactPersonName, contactEmail, phoneNumber, billingAddress);
+            user.SetCompanyProfile(profile);
+            await _companyRepo.AddAsync(profile);
 
-        var vehicle = new Vehicle(licensePlate, brand, type, propulsionType, shareable);
-        profile.AddVehicle(vehicle);
-        await _vehicleRepo.AddAsync(vehicle);
+            var vehicle = new Vehicle(licensePlate, brand, type, propulsionType, shareable);
+            profile.AddVehicle(vehicle);
+            await _vehicleRepo.AddAsync(vehicle);
 
-        return createResult;
+            await transaction.CommitAsync();
+            return createResult;
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            await _userManager.DeleteAsync(user);
+            throw;
+        }
     }
 }
