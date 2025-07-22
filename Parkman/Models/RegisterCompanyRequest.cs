@@ -11,6 +11,9 @@ public class RegisterCompanyRequest
     [Required]
     public string Password { get; set; } = string.Empty;
 
+    [Required, Compare(nameof(Password))]
+    public string ConfirmPassword { get; set; } = string.Empty;
+
     [Required]
     public string CompanyName { get; set; } = string.Empty;
 

@@ -34,6 +34,12 @@ public class AuthController : ControllerBase
         if(!ModelState.IsValid)
             return ValidationProblem(ModelState);
 
+        if(request.Password != request.ConfirmPassword)
+        {
+            ModelState.AddModelError(nameof(request.ConfirmPassword), "Passwords do not match.");
+            return ValidationProblem(ModelState);
+        }
+
         var result = await _vehicleRegistrationService.RegisterAsync(
             request.Email,
             request.Password,
@@ -65,6 +71,12 @@ public class AuthController : ControllerBase
     {
         if(!ModelState.IsValid)
             return ValidationProblem(ModelState);
+
+        if(request.Password != request.ConfirmPassword)
+        {
+            ModelState.AddModelError(nameof(request.ConfirmPassword), "Passwords do not match.");
+            return ValidationProblem(ModelState);
+        }
 
         var result = await _companyRegistrationService.RegisterAsync(
             request.Email,
