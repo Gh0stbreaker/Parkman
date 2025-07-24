@@ -27,8 +27,8 @@
                 <Forms.ValidationSummary />
 
                 <h5 class="mb-3">Account Information</h5>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                <div class="form-grid mb-3">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-envelope me-1"></i>
                             Email
@@ -36,7 +36,7 @@
                         <InputText @bind-Value="_model.Email" class="form-control" />
                         <ValidationMessage For="@(() => _model.Email)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-lock me-1"></i>
                             Password
@@ -47,7 +47,7 @@
                         </div>
                         <ValidationMessage For="@(() => _model.Password)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-lock-fill me-1"></i>
                             Confirm Password
@@ -58,8 +58,8 @@
                 </div>
 
                 <h5 class="mb-3">Personal Details</h5>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                <div class="form-grid mb-3">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-person me-1"></i>
                             First Name
@@ -67,7 +67,7 @@
                         <InputText @bind-Value="_model.FirstName" class="form-control" />
                         <ValidationMessage For="@(() => _model.FirstName)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-person me-1"></i>
                             Last Name
@@ -75,7 +75,7 @@
                         <InputText @bind-Value="_model.LastName" class="form-control" />
                         <ValidationMessage For="@(() => _model.LastName)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-calendar me-1"></i>
                             Date of Birth
@@ -83,7 +83,7 @@
                         <InputDate @bind-Value="_model.DateOfBirth" class="form-control" />
                         <ValidationMessage For="@(() => _model.DateOfBirth)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-telephone me-1"></i>
                             Phone Number
@@ -91,7 +91,7 @@
                         <InputText @bind-Value="_model.PhoneNumber" class="form-control" />
                         <ValidationMessage For="@(() => _model.PhoneNumber)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-12">
+                    <div class="span-2">
                         <label class="form-label">
                             <i class="bi bi-geo-alt me-1"></i>
                             Address
@@ -114,8 +114,8 @@
                         </button>
                     </li>
                 </ul>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                <div class="form-grid mb-3">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-card-text me-1"></i>
                             License Plate
@@ -123,7 +123,7 @@
                         <InputText @bind-Value="_model.LicensePlate" class="form-control" />
                         <ValidationMessage For="@(() => _model.LicensePlate)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-truck-front me-1"></i>
                             Brand
@@ -137,7 +137,7 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => _model.Brand)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-gear me-1"></i>
                             Type
@@ -151,7 +151,7 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => _model.Type)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-fuel-pump me-1"></i>
                             Propulsion Type
@@ -167,7 +167,7 @@
                     </div>
                     @if (registerCompanyVehicle)
                     {
-                        <div class="col-md-6">
+                        <div>
                             <label class="form-label">
                                 <i class="bi bi-envelope me-1"></i>
                                 Company Email
@@ -175,7 +175,7 @@
                             <InputText @bind-Value="_model.CompanyEmail" class="form-control" />
                             <ValidationMessage For="@(() => _model.CompanyEmail)" class="text-danger small mt-1" />
                         </div>
-                        <div class="col-md-6">
+                        <div>
                             <label class="form-label">
                                 <i class="bi bi-key me-1"></i>
                                 Pairing Password
@@ -203,8 +203,8 @@
                 <Forms.ValidationSummary />
 
                 <h5 class="mb-3">Account Information</h5>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                <div class="form-grid mb-3">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-envelope me-1"></i>
                             Email
@@ -212,7 +212,7 @@
                         <InputText @bind-Value="_companyModel.Email" class="form-control" />
                         <ValidationMessage For="@(() => _companyModel.Email)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-lock me-1"></i>
                             Password
@@ -223,7 +223,7 @@
                         </div>
                         <ValidationMessage For="@(() => _companyModel.Password)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-lock-fill me-1"></i>
                             Confirm Password
@@ -234,8 +234,8 @@
                 </div>
 
                 <h5 class="mb-3">Company Details</h5>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                <div class="form-grid mb-3">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-building me-1"></i>
                             Company Name
@@ -243,7 +243,7 @@
                         <InputText @bind-Value="_companyModel.CompanyName" class="form-control" />
                         <ValidationMessage For="@(() => _companyModel.CompanyName)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-123 me-1"></i>
                             IČO
@@ -251,7 +251,7 @@
                         <InputText @bind-Value="_companyModel.Ico" class="form-control" />
                         <ValidationMessage For="@(() => _companyModel.Ico)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-123 me-1"></i>
                             DIČ
@@ -259,7 +259,7 @@
                         <InputText @bind-Value="_companyModel.Dic" class="form-control" />
                         <ValidationMessage For="@(() => _companyModel.Dic)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-person-lines-fill me-1"></i>
                             Contact Name
@@ -267,7 +267,7 @@
                         <InputText @bind-Value="_companyModel.ContactPersonName" class="form-control" />
                         <ValidationMessage For="@(() => _companyModel.ContactPersonName)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-envelope me-1"></i>
                             Contact Email
@@ -275,7 +275,7 @@
                         <InputText @bind-Value="_companyModel.ContactEmail" class="form-control" />
                         <ValidationMessage For="@(() => _companyModel.ContactEmail)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-telephone me-1"></i>
                             Phone Number
@@ -283,7 +283,7 @@
                         <InputText @bind-Value="_companyModel.PhoneNumber" class="form-control" />
                         <ValidationMessage For="@(() => _companyModel.PhoneNumber)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-12">
+                    <div class="span-2">
                         <label class="form-label">
                             <i class="bi bi-geo-alt me-1"></i>
                             Billing Address
@@ -294,8 +294,8 @@
                 </div>
 
                 <h5 class="mb-3">Vehicle Information</h5>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
+                <div class="form-grid mb-3">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-card-text me-1"></i>
                             License Plate
@@ -303,7 +303,7 @@
                         <InputText @bind-Value="_companyModel.LicensePlate" class="form-control" />
                         <ValidationMessage For="@(() => _companyModel.LicensePlate)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-truck-front me-1"></i>
                             Brand
@@ -317,7 +317,7 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => _companyModel.Brand)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-gear me-1"></i>
                             Type
@@ -331,7 +331,7 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => _companyModel.Type)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
+                    <div>
                         <label class="form-label">
                             <i class="bi bi-fuel-pump me-1"></i>
                             Propulsion Type
