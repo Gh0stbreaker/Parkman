@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkman.Tests", "Parkman.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkman.Frontend", "Parkman.Frontend\Parkman.Frontend.csproj", "{6BB9D6AC-569F-5C73-412A-D143FBE529FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkman.Shared", "Parkman.Shared\Parkman.Shared.csproj", "{53B26616-D99C-458B-A59A-63EC37810BD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6BB9D6AC-569F-5C73-412A-D143FBE529FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BB9D6AC-569F-5C73-412A-D143FBE529FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BB9D6AC-569F-5C73-412A-D143FBE529FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53B26616-D99C-458B-A59A-63EC37810BD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53B26616-D99C-458B-A59A-63EC37810BD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53B26616-D99C-458B-A59A-63EC37810BD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53B26616-D99C-458B-A59A-63EC37810BD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

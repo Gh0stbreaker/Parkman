@@ -52,14 +52,14 @@
 </div>
 
 @code {
-    private UserProfile? profile;
+    private UserProfileDto? profile;
     private List<ReservationDto>? reservations;
 
     [Inject] private HttpClient Http { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
-        profile = await Http.GetFromJsonAsync<UserProfile>("api/user/profile");
+        profile = await Http.GetFromJsonAsync<UserProfileDto>("api/user/profile");
         reservations = await Http.GetFromJsonAsync<List<ReservationDto>>("api/reservations");
     }
 
@@ -70,20 +70,4 @@
         reservations = await Http.GetFromJsonAsync<List<ReservationDto>>("api/reservations");
     }
 
-    private class UserProfile
-    {
-        public string Email { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string? LicensePlate { get; set; }
-        public string? Brand { get; set; }
-        public string? VehicleType { get; set; }
-        public string? PropulsionType { get; set; }
-    }
-
-    private class ReservationDto
-    {
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-    }
 }

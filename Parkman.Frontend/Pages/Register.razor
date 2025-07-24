@@ -268,7 +268,7 @@
 
 @code {
     private RegisterWithVehicleRequest _model = new();
-    private RegisterCompanyFormModel _companyModel = new();
+    private RegisterCompanyRequest _companyModel = new();
     private EditContext _userEditContext = default!;
     private ValidationMessageStore _userMessageStore = default!;
     private EditContext _companyEditContext = default!;
@@ -279,38 +279,9 @@
     private string? successMessage;
     private bool showSuccessModal;
 
-    private readonly string[] VehicleBrands = new[]
-    {
-        "Tesla", "Ford", "Chevrolet", "Chrysler", "Dodge", "Jeep", "Cadillac",
-        "GMC", "Lincoln", "Buick", "Hummer", "Ram", "Bmw", "MercedesBenz",
-        "Audi", "Volkswagen", "Porsche", "Opel", "Smart", "Maybach", "Peugeot",
-        "Citroen", "Renault", "DS", "Fiat", "AlfaRomeo", "Lancia", "Ferrari",
-        "Lamborghini", "Maserati", "Pagani", "Iveco", "Jaguar", "LandRover",
-        "AstonMartin", "Bentley", "RollsRoyce", "Mini", "Lotus", "MG",
-        "Vauxhall", "Rover", "Seat", "Cupra", "Skoda", "Volvo", "Saab",
-        "Koenigsegg", "Spyker", "DAF", "Dacia", "Rinspeed", "MagyarSuzuki",
-        "Rimac", "Toyota", "Honda", "Nissan", "Mazda", "Subaru", "Suzuki",
-        "Mitsubishi", "Lexus", "Infiniti", "Daihatsu", "Acura", "Hyundai",
-        "Kia", "Genesis", "SsangYong", "Geely", "Chery", "BYD", "Nio",
-        "XPeng", "GreatWall", "Haval", "Aiways", "Hongqi", "LynkAndCo",
-        "Roewe", "Wuling", "Baojun", "Zeekr", "Tata", "Mahindra",
-        "MarutiSuzuki", "AshokLeyland", "Proton", "Perodua", "Tofas", "TOGG",
-        "Lada", "UAZ", "GAZ", "Moskvitch", "Holden", "Troller", "IKA",
-        "Bugatti", "DeTomaso", "Fisker", "Lucid", "Polestar", "Canoo",
-        "Rivian", "Bollinger", "FaradayFuture", "Aptera", "Scania", "MAN",
-        "Kamaz", "Isuzu", "Hino"
-    };
-
-    private readonly string[] VehicleTypes = new[]
-    {
-        "Car", "Truck", "Motorcycle", "Bus", "Scooter", "Bicycle"
-    };
-
-    private readonly string[] VehiclePropulsionTypes = new[]
-    {
-        "Gasoline", "Diesel", "Electric", "Hybrid", "Lpg", "NaturalGas",
-        "Hydrogen"
-    };
+    private readonly VehicleBrand[] VehicleBrands = Enum.GetValues<VehicleBrand>();
+    private readonly VehicleType[] VehicleTypes = Enum.GetValues<VehicleType>();
+    private readonly VehiclePropulsionType[] VehiclePropulsionTypes = Enum.GetValues<VehiclePropulsionType>();
 
     [Inject] private HttpClient Http { get; set; } = default!;
 
@@ -345,31 +316,14 @@
     {
         isSubmitting = true;
         successMessage = null;
-        var request = new RegisterCompanyRequest
-        {
-            Email = _companyModel.Email,
-            Password = _companyModel.Password,
-            CompanyName = _companyModel.CompanyName,
-            Ico = _companyModel.Ico,
-            Dic = _companyModel.Dic,
-            ContactPersonName = _companyModel.ContactPersonName,
-            ContactEmail = _companyModel.ContactEmail,
-            PhoneNumber = _companyModel.PhoneNumber,
-            BillingAddress = _companyModel.BillingAddress,
-            LicensePlate = _companyModel.LicensePlate,
-            Brand = _companyModel.Brand,
-            Type = _companyModel.Type,
-            PropulsionType = _companyModel.PropulsionType,
-            Shareable = _companyModel.Shareable
-        };
 
-        var response = await Http.PostAsJsonAsync("api/auth/register/company", request);
+        var response = await Http.PostAsJsonAsync("api/auth/register/company", _companyModel);
         var error = await response.ApplyValidationErrorsAsync(_companyEditContext, _companyMessageStore);
 
         if (error is null)
         {
             successMessage = "Registration successful!";
-            _companyModel = new RegisterCompanyFormModel();
+            _companyModel = new RegisterCompanyRequest();
             _companyEditContext = new EditContext(_companyModel);
             _companyMessageStore = new ValidationMessageStore(_companyEditContext);
             showSuccessModal = true;
@@ -378,108 +332,4 @@
         isSubmitting = false;
     }
 
-    public class RegisterWithVehicleRequest
-    {
-        [Required, EmailAddress]
-        public string Email { get; set; } = string.Empty;
-
-        [Required]
-        public string Password { get; set; } = string.Empty;
-
-        [Required, Compare(nameof(Password))]
-        public string ConfirmPassword { get; set; } = string.Empty;
-
-        [Required]
-        public string FirstName { get; set; } = string.Empty;
-
-        [Required]
-        public string LastName { get; set; } = string.Empty;
-
-        [Required]
-        public DateOnly? DateOfBirth { get; set; }
-
-        [Required, Phone]
-        public string PhoneNumber { get; set; } = string.Empty;
-
-        [Required]
-        public string Address { get; set; } = string.Empty;
-
-        [Required]
-        public string LicensePlate { get; set; } = string.Empty;
-
-        [Required]
-        public string Brand { get; set; } = string.Empty;
-
-        [Required]
-        public string Type { get; set; } = string.Empty;
-
-        [Required]
-        public string PropulsionType { get; set; } = string.Empty;
-
-        public bool Shareable { get; set; }
-    }
-
-    public class RegisterCompanyFormModel
-    {
-        [Required, EmailAddress]
-        public string Email { get; set; } = string.Empty;
-
-        [Required]
-        public string Password { get; set; } = string.Empty;
-
-        [Required, Compare(nameof(Password))]
-        public string ConfirmPassword { get; set; } = string.Empty;
-
-        [Required]
-        public string CompanyName { get; set; } = string.Empty;
-
-        [Required]
-        public string Ico { get; set; } = string.Empty;
-
-        public string Dic { get; set; } = string.Empty;
-
-        [Required]
-        public string ContactPersonName { get; set; } = string.Empty;
-
-        [Required, EmailAddress]
-        public string ContactEmail { get; set; } = string.Empty;
-
-        [Required, Phone]
-        public string PhoneNumber { get; set; } = string.Empty;
-
-        [Required]
-        public string BillingAddress { get; set; } = string.Empty;
-
-        [Required]
-        public string LicensePlate { get; set; } = string.Empty;
-
-        [Required]
-        public string Brand { get; set; } = string.Empty;
-
-        [Required]
-        public string Type { get; set; } = string.Empty;
-
-        [Required]
-        public string PropulsionType { get; set; } = string.Empty;
-
-        public bool Shareable { get; set; }
-    }
-
-    private class RegisterCompanyRequest
-    {
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public string CompanyName { get; set; } = string.Empty;
-        public string Ico { get; set; } = string.Empty;
-        public string Dic { get; set; } = string.Empty;
-        public string ContactPersonName { get; set; } = string.Empty;
-        public string ContactEmail { get; set; } = string.Empty;
-        public string PhoneNumber { get; set; } = string.Empty;
-        public string BillingAddress { get; set; } = string.Empty;
-        public string LicensePlate { get; set; } = string.Empty;
-        public string Brand { get; set; } = string.Empty;
-        public string Type { get; set; } = string.Empty;
-        public string PropulsionType { get; set; } = string.Empty;
-        public bool Shareable { get; set; }
-    }
 }
