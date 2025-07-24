@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Parkman.Infrastructure.Repositories
 {
@@ -133,6 +134,11 @@ namespace Parkman.Infrastructure.Repositories
             }
             _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return _context.Database.BeginTransactionAsync();
         }
 
         private static IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query, string search)
