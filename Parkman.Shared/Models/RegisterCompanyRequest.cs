@@ -47,6 +47,4 @@ public class RegisterCompanyRequest
     public VehiclePropulsionType PropulsionType { get; set; }
 
     public bool Shareable { get; set; }
-
-    public string? PairingPassword { get; set; }
 }

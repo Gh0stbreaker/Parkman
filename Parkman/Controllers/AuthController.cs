@@ -94,8 +94,7 @@ public class AuthController : ControllerBase
             request.Brand,
             request.Type,
             request.PropulsionType,
-            request.Shareable,
-            request.PairingPassword);
+            request.Shareable);
 
         if(!result.Succeeded)
         {
