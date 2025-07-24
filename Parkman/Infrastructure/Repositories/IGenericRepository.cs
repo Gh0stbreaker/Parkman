@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
+using Parkman.Shared;
 
 namespace Parkman.Infrastructure.Repositories
 {
@@ -19,7 +20,7 @@ namespace Parkman.Infrastructure.Repositories
             int? take = null,
             string? search = null);
 
-        Task<Common.PagedResult<TEntity>> ListPagedAsync(
+        Task<PagedResult<TEntity>> ListPagedAsync(
             Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             string includeProperties = "",

@@ -1,4 +1,4 @@
-namespace Parkman.Dtos;
+namespace Parkman.Shared.Dtos;
 
 public class UserProfileDto
 {

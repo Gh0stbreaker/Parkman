@@ -1,3 +1,4 @@
+using Parkman.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ public interface IGenericService<TEntity> where TEntity : class
         int? take = null,
         string? search = null);
 
-    Task<Common.PagedResult<TEntity>> ListPagedAsync(
+    Task<PagedResult<TEntity>> ListPagedAsync(
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "",

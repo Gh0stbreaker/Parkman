@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Parkman.Infrastructure.Repositories;
+using Parkman.Shared;
 
 namespace Parkman.Infrastructure.Services;
 
@@ -33,7 +34,7 @@ public class GenericService<TEntity> : IGenericService<TEntity>
         return _repository.ListAsync(filter, orderBy, includeProperties, skip, take, search);
     }
 
-    public Task<Common.PagedResult<TEntity>> ListPagedAsync(
+    public Task<PagedResult<TEntity>> ListPagedAsync(
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "",

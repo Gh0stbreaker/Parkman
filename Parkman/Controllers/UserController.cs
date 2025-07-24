@@ -2,10 +2,10 @@ using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Parkman.Domain.Entities;
-using Parkman.Domain.Enums;
+using Parkman.Shared.Entities;
+using Parkman.Shared.Enums;
 using Parkman.Infrastructure.Repositories.Entities;
-using Parkman.Models;
+using Parkman.Shared.Models;
 
 namespace Parkman.Controllers;
 

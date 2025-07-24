@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Parkman.Domain.Entities;
+namespace Parkman.Shared.Entities;
 
 public class Reservation
 {

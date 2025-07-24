@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Parkman.Domain.Entities;
+using Parkman.Shared.Entities;
 using Parkman.Infrastructure.Repositories.Entities;
 
 namespace Parkman.Controllers;

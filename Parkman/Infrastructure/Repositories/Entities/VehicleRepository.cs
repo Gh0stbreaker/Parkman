@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Parkman.Domain.Entities;
+using Parkman.Shared.Entities;
 
 namespace Parkman.Infrastructure.Repositories.Entities;
 

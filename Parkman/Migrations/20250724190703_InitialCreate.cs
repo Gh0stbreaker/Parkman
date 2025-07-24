@@ -228,7 +228,8 @@ namespace Parkman.Migrations
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyProfileUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    CompanyProfileUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsCompanyApproved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -278,6 +279,7 @@ namespace Parkman.Migrations
                     Type = table.Column<int>(type: "int", nullable: false),
                     PropulsionType = table.Column<int>(type: "int", nullable: false),
                     IsShareable = table.Column<bool>(type: "bit", nullable: false),
+                    PairingPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyProfileUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PersonProfileUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },

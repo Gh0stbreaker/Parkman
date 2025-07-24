@@ -1,4 +1,4 @@
-namespace Parkman.Domain.Enums;
+namespace Parkman.Shared.Enums;
 
 public enum ParkingSpotType
 {

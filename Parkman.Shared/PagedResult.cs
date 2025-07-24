@@ -1,13 +1,14 @@
-namespace Parkman.Common;
-
-public class PagedResult<T>
+namespace Parkman.Shared
 {
-    public IReadOnlyList<T> Items { get; }
-    public int TotalCount { get; }
-
-    public PagedResult(IReadOnlyList<T> items, int totalCount)
+    public class PagedResult<T>
     {
-        Items = items;
-        TotalCount = totalCount;
+        public IReadOnlyList<T> Items { get; }
+        public int TotalCount { get; }
+
+        public PagedResult(IReadOnlyList<T> items, int totalCount)
+        {
+            Items = items;
+            TotalCount = totalCount;
+        }
     }
 }

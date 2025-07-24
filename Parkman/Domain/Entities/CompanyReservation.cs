@@ -1,6 +1,6 @@
 using System;
 
-namespace Parkman.Domain.Entities;
+namespace Parkman.Shared.Entities;
 
 public class CompanyReservation
 {

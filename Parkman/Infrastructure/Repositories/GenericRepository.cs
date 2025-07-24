@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Parkman.Infrastructure.Exceptions;
+using Parkman.Shared;
 
 namespace Parkman.Infrastructure.Repositories
 {
@@ -73,7 +74,7 @@ namespace Parkman.Infrastructure.Repositories
             return await query.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Common.PagedResult<TEntity>> ListPagedAsync(
+        public async Task<PagedResult<TEntity>> ListPagedAsync(
             Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             string includeProperties = "",
@@ -115,7 +116,7 @@ namespace Parkman.Infrastructure.Repositories
             }
 
             var items = await query.AsNoTracking().ToListAsync();
-            return new Common.PagedResult<TEntity>(items, totalCount);
+            return new PagedResult<TEntity>(items, totalCount);
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)

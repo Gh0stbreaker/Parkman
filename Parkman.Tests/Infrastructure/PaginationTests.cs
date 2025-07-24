@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Parkman.Domain.Entities;
+using Parkman.Shared.Entities;
 using Parkman.Infrastructure;
 using Parkman.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging.Abstractions;

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Parkman.Models;
+namespace Parkman.Shared.Models;
 
 public class LoginRequest
 {

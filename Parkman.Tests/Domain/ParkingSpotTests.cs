@@ -1,6 +1,6 @@
 using System;
-using Parkman.Domain.Entities;
-using Parkman.Domain.Enums;
+using Parkman.Shared.Entities;
+using Parkman.Shared.Enums;
 using Xunit;
 
 namespace Parkman.Tests.Domain;

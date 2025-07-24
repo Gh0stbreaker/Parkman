@@ -12,7 +12,7 @@ using Parkman.Infrastructure;
 namespace Parkman.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250720161055_InitialCreate")]
+    [Migration("20250724190703_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -351,6 +351,9 @@ namespace Parkman.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsCompanyApproved")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -424,6 +427,9 @@ namespace Parkman.Migrations
 
                     b.Property<string>("LicensePlate")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PairingPassword")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PersonProfileUserId")

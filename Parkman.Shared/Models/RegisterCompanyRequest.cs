@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Parkman.Domain.Enums;
+using Parkman.Shared.Enums;
 
-namespace Parkman.Models;
+namespace Parkman.Shared.Models;
 
 public class RegisterCompanyRequest
 {

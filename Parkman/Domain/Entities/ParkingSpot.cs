@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Parkman.Domain.Enums;
+using Parkman.Shared.Enums;
+using Parkman.Shared.Enums;
 
-namespace Parkman.Domain.Entities;
+namespace Parkman.Shared.Entities;
 
 public class ParkingSpot
 {
