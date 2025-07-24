@@ -78,6 +78,18 @@
                 </div>
 
                 <h5 class="mb-3">Vehicle Information</h5>
+                <ul class="nav nav-pills justify-content-center mb-3">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link @(registerCompanyVehicle ? string.Empty : "active")" @onclick="() => registerCompanyVehicle = false">
+                            Personal Vehicle
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link @(registerCompanyVehicle ? "active" : string.Empty)" @onclick="() => registerCompanyVehicle = true">
+                            Company Vehicle
+                        </button>
+                    </li>
+                </ul>
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
                         <label class="form-label">License Plate</label>
@@ -117,16 +129,19 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => _model.PropulsionType)" class="text-danger small mt-1" />
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Company Email (optional)</label>
-                        <InputText @bind-Value="_model.CompanyEmail" class="form-control" />
-                        <ValidationMessage For="@(() => _model.CompanyEmail)" class="text-danger small mt-1" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Pairing Password</label>
-                        <InputText @bind-Value="_model.PairingPassword" class="form-control" />
-                        <ValidationMessage For="@(() => _model.PairingPassword)" class="text-danger small mt-1" />
-                    </div>
+                    @if (registerCompanyVehicle)
+                    {
+                        <div class="col-md-6">
+                            <label class="form-label">Company Email</label>
+                            <InputText @bind-Value="_model.CompanyEmail" class="form-control" />
+                            <ValidationMessage For="@(() => _model.CompanyEmail)" class="text-danger small mt-1" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Pairing Password</label>
+                            <InputText @bind-Value="_model.PairingPassword" class="form-control" />
+                            <ValidationMessage For="@(() => _model.PairingPassword)" class="text-danger small mt-1" />
+                        </div>
+                    }
                 </div>
 
                 <div class="form-check mb-3">
@@ -289,6 +304,7 @@
     private EditContext _companyEditContext = default!;
     private ValidationMessageStore _companyMessageStore = default!;
     private bool registerAsCompany;
+    private bool registerCompanyVehicle;
     private bool showPassword;
     private bool isSubmitting;
     private string? successMessage;
@@ -312,6 +328,31 @@
     {
         isSubmitting = true;
         successMessage = null;
+        _userMessageStore.Clear();
+
+        if (registerCompanyVehicle)
+        {
+            bool validationFailed = false;
+            if (string.IsNullOrWhiteSpace(_model.CompanyEmail))
+            {
+                _userMessageStore.Add(new FieldIdentifier(_model, nameof(_model.CompanyEmail)), new[] { "Company email is required." });
+                validationFailed = true;
+            }
+
+            if (string.IsNullOrWhiteSpace(_model.PairingPassword))
+            {
+                _userMessageStore.Add(new FieldIdentifier(_model, nameof(_model.PairingPassword)), new[] { "Pairing password is required." });
+                validationFailed = true;
+            }
+
+            if (validationFailed)
+            {
+                _userEditContext.NotifyValidationStateChanged();
+                isSubmitting = false;
+                return;
+            }
+        }
+
         var response = await Http.PostAsJsonAsync("api/auth/register", _model);
         var error = await response.ApplyValidationErrorsAsync(_userEditContext, _userMessageStore);
 
@@ -321,6 +362,7 @@
             _model = new RegisterWithVehicleRequest();
             _userEditContext = new EditContext(_model);
             _userMessageStore = new ValidationMessageStore(_userEditContext);
+            registerCompanyVehicle = false;
             showSuccessModal = true;
         }
 
