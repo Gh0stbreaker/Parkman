@@ -56,6 +56,15 @@ public class UserCompanyRegistrationService : IUserCompanyRegistrationService
         VehiclePropulsionType propulsionType,
         bool shareable = false)
     {
+        if (await _vehicleRepo.LicensePlateExistsAsync(licensePlate))
+        {
+            return IdentityResult.Failed(new IdentityError
+            {
+                Code = "DuplicateLicensePlate",
+                Description = "Vehicle with this license plate already exists."
+            });
+        }
+
         using var transaction = await _companyRepo.BeginTransactionAsync();
 
         var user = new ApplicationUser { UserName = email, Email = email };

@@ -42,4 +42,6 @@ public class RegisterWithVehicleRequest
     public VehiclePropulsionType PropulsionType { get; set; }
 
     public bool Shareable { get; set; }
+
+    public string? CompanyEmail { get; set; }
 }

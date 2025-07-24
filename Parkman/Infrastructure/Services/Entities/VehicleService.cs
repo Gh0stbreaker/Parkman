@@ -5,5 +5,20 @@ namespace Parkman.Infrastructure.Services.Entities;
 
 public class VehicleService : GenericService<Vehicle>, IVehicleService
 {
-    public VehicleService(IVehicleRepository repository) : base(repository) { }
+    private readonly IVehicleRepository _repository;
+
+    public VehicleService(IVehicleRepository repository) : base(repository)
+    {
+        _repository = repository;
+    }
+
+    public Task<bool> LicensePlateExistsAsync(string licensePlate)
+    {
+        return _repository.LicensePlateExistsAsync(licensePlate);
+    }
+
+    public Task<Vehicle?> GetByLicensePlateAsync(string licensePlate)
+    {
+        return _repository.GetByLicensePlateAsync(licensePlate);
+    }
 }
