@@ -13,22 +13,22 @@ namespace Parkman.Infrastructure.Repositories
     public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         where TEntity : class
     {
-        private readonly ApplicationDbContext _context;
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly ApplicationDbContext Context;
+        protected readonly DbSet<TEntity> DbSet;
         private readonly ILogger<GenericRepository<TEntity>> _logger;
 
         public GenericRepository(
             ApplicationDbContext context,
             ILogger<GenericRepository<TEntity>> logger)
         {
-            _context = context;
-            _dbSet = _context.Set<TEntity>();
+            Context = context;
+            DbSet = Context.Set<TEntity>();
             _logger = logger;
         }
 
         public async Task<TEntity?> GetByIdAsync(object id)
         {
-            return await _dbSet.FindAsync(id);
+            return await DbSet.FindAsync(id);
         }
 
         public async Task<IReadOnlyList<TEntity>> ListAsync(
@@ -39,7 +39,7 @@ namespace Parkman.Infrastructure.Repositories
             int? take = null,
             string? search = null)
         {
-            IQueryable<TEntity> query = _dbSet;
+            IQueryable<TEntity> query = DbSet;
 
             if (filter != null)
             {
@@ -81,7 +81,7 @@ namespace Parkman.Infrastructure.Repositories
             int? take = null,
             string? search = null)
         {
-            IQueryable<TEntity> query = _dbSet;
+            IQueryable<TEntity> query = DbSet;
 
             if (filter != null)
             {
@@ -122,8 +122,8 @@ namespace Parkman.Infrastructure.Repositories
         {
             try
             {
-                await _dbSet.AddAsync(entity);
-                await _context.SaveChangesAsync();
+                await DbSet.AddAsync(entity);
+                await Context.SaveChangesAsync();
                 return entity;
             }
             catch (DbUpdateException ex)
@@ -137,9 +137,9 @@ namespace Parkman.Infrastructure.Repositories
         {
             try
             {
-                _dbSet.Attach(entity);
-                _context.Entry(entity).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                DbSet.Attach(entity);
+                Context.Entry(entity).State = EntityState.Modified;
+                await Context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -152,12 +152,12 @@ namespace Parkman.Infrastructure.Repositories
         {
             try
             {
-                if (_context.Entry(entity).State == EntityState.Detached)
+                if (Context.Entry(entity).State == EntityState.Detached)
                 {
-                    _dbSet.Attach(entity);
+                    DbSet.Attach(entity);
                 }
-                _dbSet.Remove(entity);
-                await _context.SaveChangesAsync();
+                DbSet.Remove(entity);
+                await Context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -168,7 +168,7 @@ namespace Parkman.Infrastructure.Repositories
 
         public Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            return _context.Database.BeginTransactionAsync();
+            return Context.Database.BeginTransactionAsync();
         }
 
         private static IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query, string search)

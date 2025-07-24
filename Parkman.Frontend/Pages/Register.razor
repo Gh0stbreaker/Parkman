@@ -117,6 +117,11 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => _model.PropulsionType)" class="text-danger small mt-1" />
                     </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Company Email (optional)</label>
+                        <InputText @bind-Value="_model.CompanyEmail" class="form-control" />
+                        <ValidationMessage For="@(() => _model.CompanyEmail)" class="text-danger small mt-1" />
+                    </div>
                 </div>
 
                 <div class="form-check mb-3">
