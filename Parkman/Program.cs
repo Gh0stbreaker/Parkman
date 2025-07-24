@@ -4,8 +4,13 @@ using Parkman.Domain.Entities;
 using Parkman.Infrastructure;
 using Parkman.Infrastructure.Repositories;
 using Parkman.Infrastructure.Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, services, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .WriteTo.Console());
 
 // Add services to the container.
 

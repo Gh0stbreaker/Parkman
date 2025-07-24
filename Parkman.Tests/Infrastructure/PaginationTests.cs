@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Parkman.Domain.Entities;
 using Parkman.Infrastructure;
 using Parkman.Infrastructure.Repositories;
+using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 namespace Parkman.Tests.Infrastructure;
@@ -27,7 +28,9 @@ public class PaginationTests
 
         using (var context = new ApplicationDbContext(options))
         {
-            var repo = new GenericRepository<ParkingLot>(context);
+            var repo = new GenericRepository<ParkingLot>(
+                context,
+                NullLogger<GenericRepository<ParkingLot>>.Instance);
             var result = await repo.ListPagedAsync(skip:1, take:1);
 
             Assert.Equal(3, result.TotalCount);
