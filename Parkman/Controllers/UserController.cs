@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Parkman.Shared.Entities;
 using Parkman.Shared.Enums;
 using Parkman.Infrastructure.Repositories.Entities;
@@ -34,7 +35,12 @@ public class UserController : ControllerBase
     [HttpGet("profile")]
     public async Task<IActionResult> GetProfile()
     {
-        var user = await _userManager.GetUserAsync(User);
+        var userId = _userManager.GetUserId(User);
+        var user = await _userManager.Users
+            .Include(u => u.PersonProfile!)
+                .ThenInclude(p => p.Vehicle)
+            .Include(u => u.CompanyProfile)
+            .FirstOrDefaultAsync(u => u.Id == userId);
         if (user == null)
         {
             return Unauthorized();
@@ -51,19 +57,15 @@ public class UserController : ControllerBase
 
         if (user.PersonProfile != null)
         {
-            var profiles = await _personProfileRepository.ListAsync(p => p.UserId == user.Id, includeProperties: "Vehicle");
-            var profile = profiles.FirstOrDefault();
-            if (profile != null)
+            var profile = user.PersonProfile;
+            firstName = profile.FirstName;
+            lastName = profile.LastName;
+            if (profile.Vehicle != null)
             {
-                firstName = profile.FirstName;
-                lastName = profile.LastName;
-                if (profile.Vehicle != null)
-                {
-                    licensePlate = profile.Vehicle.LicensePlate;
-                    brand = profile.Vehicle.Brand;
-                    vehicleType = profile.Vehicle.Type;
-                    propulsionType = profile.Vehicle.PropulsionType;
-                }
+                licensePlate = profile.Vehicle.LicensePlate;
+                brand = profile.Vehicle.Brand;
+                vehicleType = profile.Vehicle.Type;
+                propulsionType = profile.Vehicle.PropulsionType;
             }
         }
         else if (user.CompanyProfile != null)
@@ -86,17 +88,18 @@ public class UserController : ControllerBase
         if (!ModelState.IsValid)
             return ValidationProblem(ModelState);
 
-        var user = await _userManager.GetUserAsync(User);
+        var userId = _userManager.GetUserId(User);
+        var user = await _userManager.Users
+            .Include(u => u.PersonProfile!)
+                .ThenInclude(p => p.Vehicle)
+            .FirstOrDefaultAsync(u => u.Id == userId);
         if (user == null)
             return Unauthorized();
 
         if (user.PersonProfile == null)
             return BadRequest();
 
-        var profiles = await _personProfileRepository.ListAsync(p => p.UserId == user.Id, includeProperties: "Vehicle");
-        var profile = profiles.FirstOrDefault();
-        if (profile == null)
-            return NotFound();
+        var profile = user.PersonProfile;
 
         profile.Update(request.FirstName, request.LastName, profile.DateOfBirth, profile.PhoneNumber, profile.Address);
 

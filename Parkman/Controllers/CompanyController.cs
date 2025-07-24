@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Parkman.Shared.Entities;
 using Parkman.Infrastructure.Repositories.Entities;
 
@@ -25,7 +26,10 @@ public class CompanyController : ControllerBase
     [HttpPost("approve/{personUserId}")]
     public async Task<IActionResult> ApproveMember(string personUserId)
     {
-        var user = await _userManager.GetUserAsync(User);
+        var userId = _userManager.GetUserId(User);
+        var user = await _userManager.Users
+            .Include(u => u.CompanyProfile)
+            .FirstOrDefaultAsync(u => u.Id == userId);
         if (user?.CompanyProfile == null)
             return Forbid();
 
