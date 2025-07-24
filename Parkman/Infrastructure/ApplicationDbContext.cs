@@ -44,6 +44,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             profile.Property(p => p.DateOfBirth);
             profile.Property(p => p.PhoneNumber).IsRequired();
             profile.Property(p => p.Address).IsRequired();
+            profile.Property(p => p.IsCompanyApproved);
             profile.HasOne(p => p.CompanyProfile)
                 .WithMany(c => c.Members)
                 .HasForeignKey(p => p.CompanyProfileUserId);
@@ -90,6 +91,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             vehicle.Property(v => v.Type).IsRequired();
             vehicle.Property(v => v.PropulsionType).IsRequired();
             vehicle.Property(v => v.IsShareable);
+            vehicle.Property(v => v.PairingPassword);
 
             vehicle.HasOne(v => v.PersonProfile)
                 .WithOne(p => p.Vehicle)

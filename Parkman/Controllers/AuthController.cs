@@ -53,7 +53,8 @@ public class AuthController : ControllerBase
             request.Type,
             request.PropulsionType,
             request.Shareable,
-            request.CompanyEmail);
+            request.CompanyEmail,
+            request.PairingPassword);
 
         if(!result.Succeeded)
         {
@@ -93,7 +94,8 @@ public class AuthController : ControllerBase
             request.Brand,
             request.Type,
             request.PropulsionType,
-            request.Shareable);
+            request.Shareable,
+            request.PairingPassword);
 
         if(!result.Succeeded)
         {

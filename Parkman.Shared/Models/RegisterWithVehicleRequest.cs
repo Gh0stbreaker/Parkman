@@ -44,4 +44,6 @@ public class RegisterWithVehicleRequest
     public bool Shareable { get; set; }
 
     public string? CompanyEmail { get; set; }
+
+    public string? PairingPassword { get; set; }
 }

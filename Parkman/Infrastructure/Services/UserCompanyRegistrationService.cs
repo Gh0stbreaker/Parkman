@@ -21,7 +21,8 @@ public interface IUserCompanyRegistrationService
         VehicleBrand brand,
         VehicleType type,
         VehiclePropulsionType propulsionType,
-        bool shareable = false);
+        bool shareable = false,
+        string? pairingPassword = null);
 }
 
 public class UserCompanyRegistrationService : IUserCompanyRegistrationService
@@ -54,7 +55,8 @@ public class UserCompanyRegistrationService : IUserCompanyRegistrationService
         VehicleBrand brand,
         VehicleType type,
         VehiclePropulsionType propulsionType,
-        bool shareable = false)
+        bool shareable = false,
+        string? pairingPassword = null)
     {
         if (await _vehicleRepo.LicensePlateExistsAsync(licensePlate))
         {
@@ -81,7 +83,7 @@ public class UserCompanyRegistrationService : IUserCompanyRegistrationService
             user.SetCompanyProfile(profile);
             await _companyRepo.AddAsync(profile);
 
-            var vehicle = new Vehicle(licensePlate, brand, type, propulsionType, shareable);
+            var vehicle = new Vehicle(licensePlate, brand, type, propulsionType, shareable, pairingPassword);
             profile.AddVehicle(vehicle);
             await _vehicleRepo.AddAsync(vehicle);
 

@@ -253,6 +253,9 @@ namespace Parkman.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsCompanyApproved")
+                        .HasColumnType("bit");
+
                     b.HasKey("UserId");
 
                     b.ToTable("CompanyProfiles");
@@ -418,6 +421,9 @@ namespace Parkman.Migrations
 
                     b.Property<bool>("IsShareable")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PairingPassword")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LicensePlate")
                         .IsRequired()
