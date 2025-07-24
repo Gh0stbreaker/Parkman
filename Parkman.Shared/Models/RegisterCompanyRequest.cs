@@ -8,21 +8,21 @@ public class RegisterCompanyRequest
     [Required, EmailAddress]
     public string Email { get; set; } = string.Empty;
 
-    [Required]
+    [Required, StringLength(100, MinimumLength = 6)]
     public string Password { get; set; } = string.Empty;
 
-    [Required, Compare(nameof(Password))]
+    [Required, Compare(nameof(Password)), StringLength(100, MinimumLength = 6)]
     public string ConfirmPassword { get; set; } = string.Empty;
 
-    [Required]
+    [Required, StringLength(100)]
     public string CompanyName { get; set; } = string.Empty;
 
-    [Required]
+    [Required, RegularExpression(@"^\d{8}$", ErrorMessage = "IČO must have 8 digits.")]
     public string Ico { get; set; } = string.Empty;
 
     public string Dic { get; set; } = string.Empty;
 
-    [Required]
+    [Required, StringLength(100)]
     public string ContactPersonName { get; set; } = string.Empty;
 
     [Required, EmailAddress]
@@ -31,7 +31,7 @@ public class RegisterCompanyRequest
     [Required, Phone]
     public string PhoneNumber { get; set; } = string.Empty;
 
-    [Required]
+    [Required, StringLength(200)]
     public string BillingAddress { get; set; } = string.Empty;
 
     [Required]
