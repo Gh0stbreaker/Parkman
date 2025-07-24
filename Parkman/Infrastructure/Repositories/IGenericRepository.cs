@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Parkman.Infrastructure.Repositories
 {
@@ -29,5 +30,6 @@ namespace Parkman.Infrastructure.Repositories
         Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
+        Task<IDbContextTransaction> BeginTransactionAsync();
     }
 }

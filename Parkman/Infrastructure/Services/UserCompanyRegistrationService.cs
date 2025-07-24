@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Parkman.Domain.Entities;
 using Parkman.Domain.Enums;
 using Parkman.Infrastructure.Repositories.Entities;
-using Parkman.Infrastructure;
 
 namespace Parkman.Infrastructure.Services;
 
@@ -30,18 +29,15 @@ public class UserCompanyRegistrationService : IUserCompanyRegistrationService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICompanyProfileRepository _companyRepo;
     private readonly IVehicleRepository _vehicleRepo;
-    private readonly ApplicationDbContext _context;
 
     public UserCompanyRegistrationService(
         UserManager<ApplicationUser> userManager,
         ICompanyProfileRepository companyRepo,
-        IVehicleRepository vehicleRepo,
-        ApplicationDbContext context)
+        IVehicleRepository vehicleRepo)
     {
         _userManager = userManager;
         _companyRepo = companyRepo;
         _vehicleRepo = vehicleRepo;
-        _context = context;
     }
 
     public async Task<IdentityResult> RegisterAsync(
@@ -60,7 +56,7 @@ public class UserCompanyRegistrationService : IUserCompanyRegistrationService
         VehiclePropulsionType propulsionType,
         bool shareable = false)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        using var transaction = await _companyRepo.BeginTransactionAsync();
 
         var user = new ApplicationUser { UserName = email, Email = email };
         var createResult = await _userManager.CreateAsync(user, password);
