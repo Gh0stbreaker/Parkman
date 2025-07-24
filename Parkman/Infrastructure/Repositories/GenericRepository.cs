@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
+using Parkman.Infrastructure.Exceptions;
 
 namespace Parkman.Infrastructure.Repositories
 {
@@ -13,11 +15,15 @@ namespace Parkman.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
+        private readonly ILogger<GenericRepository<TEntity>> _logger;
 
-        public GenericRepository(ApplicationDbContext context)
+        public GenericRepository(
+            ApplicationDbContext context,
+            ILogger<GenericRepository<TEntity>> logger)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
+            _logger = logger;
         }
 
         public async Task<TEntity?> GetByIdAsync(object id)
@@ -114,26 +120,50 @@ namespace Parkman.Infrastructure.Repositories
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {
-            await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+                await _dbSet.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Error adding entity of type {Entity}", typeof(TEntity).Name);
+                throw new RepositoryException("Error adding entity", ex);
+            }
         }
 
         public async Task UpdateAsync(TEntity entity)
         {
-            _dbSet.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            try
+            {
+                _dbSet.Attach(entity);
+                _context.Entry(entity).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Error updating entity of type {Entity}", typeof(TEntity).Name);
+                throw new RepositoryException("Error updating entity", ex);
+            }
         }
 
         public async Task DeleteAsync(TEntity entity)
         {
-            if (_context.Entry(entity).State == EntityState.Detached)
+            try
             {
-                _dbSet.Attach(entity);
+                if (_context.Entry(entity).State == EntityState.Detached)
+                {
+                    _dbSet.Attach(entity);
+                }
+                _dbSet.Remove(entity);
+                await _context.SaveChangesAsync();
             }
-            _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Error deleting entity of type {Entity}", typeof(TEntity).Name);
+                throw new RepositoryException("Error deleting entity", ex);
+            }
         }
 
         public Task<IDbContextTransaction> BeginTransactionAsync()

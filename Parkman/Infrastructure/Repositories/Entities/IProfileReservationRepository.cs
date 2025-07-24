@@ -1,4 +1,5 @@
 using Parkman.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Parkman.Infrastructure.Repositories.Entities;
 
@@ -6,5 +7,8 @@ public interface IProfileReservationRepository : IGenericRepository<ProfileReser
 
 public class ProfileReservationRepository : GenericRepository<ProfileReservation>, IProfileReservationRepository
 {
-    public ProfileReservationRepository(ApplicationDbContext context) : base(context) { }
+    public ProfileReservationRepository(
+        ApplicationDbContext context,
+        ILogger<GenericRepository<ProfileReservation>> logger)
+        : base(context, logger) { }
 }
