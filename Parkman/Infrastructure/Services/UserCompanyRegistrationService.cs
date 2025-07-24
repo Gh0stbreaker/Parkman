@@ -69,7 +69,12 @@ public class UserCompanyRegistrationService : IUserCompanyRegistrationService
 
         using var transaction = await _companyRepo.BeginTransactionAsync();
 
-        var user = new ApplicationUser { UserName = email, Email = email };
+        var user = new ApplicationUser
+        {
+            UserName = email,
+            Email = email,
+            PhoneNumber = phoneNumber
+        };
         var createResult = await _userManager.CreateAsync(user, password);
         if (!createResult.Succeeded)
         {

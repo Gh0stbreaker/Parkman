@@ -103,7 +103,12 @@ public class UserVehicleRegistrationService : IUserVehicleRegistrationService
 
         using var transaction = await _personRepo.BeginTransactionAsync();
 
-        var user = new ApplicationUser { UserName = email, Email = email };
+        var user = new ApplicationUser
+        {
+            UserName = email,
+            Email = email,
+            PhoneNumber = phoneNumber
+        };
         var createResult = await _userManager.CreateAsync(user, password);
         if (!createResult.Succeeded)
         {
@@ -126,23 +131,23 @@ public class UserVehicleRegistrationService : IUserVehicleRegistrationService
             }
             else
             {
-            var companyUser = await _userManager.FindByEmailAsync(companyEmail!);
-            var companyProfile = await _companyRepo.GetByIdAsync(companyUser!.Id);
+                var companyUser = await _userManager.FindByEmailAsync(companyEmail!);
+                var companyProfile = await _companyRepo.GetByIdAsync(companyUser!.Id);
 
-            if (existingVehicle.PairingPassword != pairingPassword)
-            {
-                return IdentityResult.Failed(new IdentityError
+                if (existingVehicle.PairingPassword != pairingPassword)
                 {
-                    Code = "InvalidPairingPassword",
-                    Description = "Invalid pairing password."
-                });
-            }
+                    return IdentityResult.Failed(new IdentityError
+                    {
+                        Code = "InvalidPairingPassword",
+                        Description = "Invalid pairing password."
+                    });
+                }
 
-            companyProfile!.AddMember(profile);
-            profile.SetVehicle(existingVehicle);
-            await _vehicleRepo.UpdateAsync(existingVehicle);
-            await _personRepo.UpdateAsync(profile);
-            await _companyRepo.UpdateAsync(companyProfile);
+                companyProfile!.AddMember(profile);
+                profile.SetVehicle(existingVehicle);
+                await _vehicleRepo.UpdateAsync(existingVehicle);
+                await _personRepo.UpdateAsync(profile);
+                await _companyRepo.UpdateAsync(companyProfile);
             }
 
             await transaction.CommitAsync();
