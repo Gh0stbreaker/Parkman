@@ -22,6 +22,8 @@ public class PersonProfile
     public string? CompanyProfileUserId { get; private set; }
     public CompanyProfile? CompanyProfile { get; private set; }
 
+    public bool IsCompanyApproved { get; private set; }
+
     private PersonProfile() { }
 
     public PersonProfile(
@@ -90,5 +92,10 @@ public class PersonProfile
     {
         CompanyProfile = companyProfile;
         CompanyProfileUserId = companyProfile.UserId;
+    }
+
+    internal void ApproveCompanyMembership()
+    {
+        IsCompanyApproved = true;
     }
 }
