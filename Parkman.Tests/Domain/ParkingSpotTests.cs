@@ -1,5 +1,5 @@
 using System;
-using Parkman.Shared.Entities;
+using Parkman.Domain.Entities;
 using Parkman.Shared.Enums;
 using Xunit;
 
