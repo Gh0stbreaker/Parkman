@@ -131,7 +131,13 @@ public class AuthController : ControllerBase
         if(!ModelState.IsValid)
             return ValidationProblem(ModelState);
 
-        var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, lockoutOnFailure: true);
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+        {
+            return Unauthorized(new ProblemDetails { Title = "Invalid email or password." });
+        }
+
+        var result = await _signInManager.PasswordSignInAsync(user.UserName!, request.Password, false, lockoutOnFailure: true);
 
         if (result.Succeeded)
         {
@@ -140,15 +146,17 @@ public class AuthController : ControllerBase
 
         if (result.IsLockedOut)
         {
-            return Forbid();
+            return Forbid(new ProblemDetails { Title = "Account is locked." });
         }
 
         if (result.IsNotAllowed)
         {
-            return StatusCode(StatusCodes.Status403Forbidden);
+            var verified = await _userManager.IsEmailConfirmedAsync(user);
+            var title = verified ? "Access denied." : "Account is not verified.";
+            return StatusCode(StatusCodes.Status403Forbidden, new ProblemDetails { Title = title });
         }
 
-        return Unauthorized();
+        return Unauthorized(new ProblemDetails { Title = "Invalid email or password." });
     }
 
     [Authorize]
