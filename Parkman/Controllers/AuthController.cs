@@ -15,17 +15,20 @@ public class AuthController : ControllerBase
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IUserVehicleRegistrationService _vehicleRegistrationService;
     private readonly IUserCompanyRegistrationService _companyRegistrationService;
+    private readonly IEmailSender _emailSender;
 
     public AuthController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IUserVehicleRegistrationService vehicleRegistrationService,
-        IUserCompanyRegistrationService companyRegistrationService)
+        IUserCompanyRegistrationService companyRegistrationService,
+        IEmailSender emailSender)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _vehicleRegistrationService = vehicleRegistrationService;
         _companyRegistrationService = companyRegistrationService;
+        _emailSender = emailSender;
     }
 
     [HttpPost("register")]
@@ -63,6 +66,13 @@ public class AuthController : ControllerBase
                 ModelState.AddModelError(error.Code, error.Description);
             }
             return ValidationProblem(ModelState);
+        }
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user != null)
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var link = Url.Action(nameof(ConfirmEmail), "Auth", new { userId = user.Id, token }, Request.Scheme);
+            await _emailSender.SendEmailAsync(request.Email, "Confirm your email", $"Please confirm your account by <a href=\"{link}\">clicking here</a>.");
         }
 
         return Ok();
@@ -104,6 +114,13 @@ public class AuthController : ControllerBase
             }
             return ValidationProblem(ModelState);
         }
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user != null)
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var link = Url.Action(nameof(ConfirmEmail), "Auth", new { userId = user.Id, token }, Request.Scheme);
+            await _emailSender.SendEmailAsync(request.Email, "Confirm your email", $"Please confirm your account by <a href=\"{link}\">clicking here</a>.");
+        }
 
         return Ok();
     }
@@ -140,5 +157,58 @@ public class AuthController : ControllerBase
     {
         await _signInManager.SignOutAsync();
         return Ok();
+    }
+
+    [HttpGet("confirm")]
+    public async Task<IActionResult> ConfirmEmail(string userId, string token)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return BadRequest();
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        if (result.Succeeded) return Ok();
+
+        return BadRequest();
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+    {
+        if (!ModelState.IsValid) return ValidationProblem(ModelState);
+
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+        {
+            return Ok();
+        }
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var link = Url.Action(nameof(ResetPassword), "Auth", new { email = request.Email, token }, Request.Scheme);
+        await _emailSender.SendEmailAsync(request.Email, "Reset your password", $"Reset your password by <a href=\"{link}\">clicking here</a>.");
+        return Ok();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+    {
+        if (!ModelState.IsValid) return ValidationProblem(ModelState);
+
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null) return BadRequest();
+
+        if (request.Password != request.ConfirmPassword)
+        {
+            ModelState.AddModelError(nameof(request.ConfirmPassword), "Passwords do not match.");
+            return ValidationProblem(ModelState);
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
+        if (result.Succeeded) return Ok();
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(error.Code, error.Description);
+        }
+        return ValidationProblem(ModelState);
     }
 }

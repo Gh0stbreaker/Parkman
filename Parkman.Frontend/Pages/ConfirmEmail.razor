@@ -1,0 +1,30 @@
+@page "/confirm-email"
+@using Microsoft.AspNetCore.WebUtilities
+
+<div class="container py-4 text-center">
+    <h3 class="mb-3 h4">Email Confirmation</h3>
+    <p>@message</p>
+</div>
+
+@code {
+    private string message = "Processing...";
+
+    [Inject] private HttpClient Http { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+        if (query.TryGetValue("userId", out var userId) && query.TryGetValue("token", out var token))
+        {
+            var url = $"api/auth/confirm?userId={Uri.EscapeDataString(userId)}&token={Uri.EscapeDataString(token)}";
+            var response = await Http.GetAsync(url);
+            message = response.IsSuccessStatusCode ? "Email confirmed." : "Confirmation failed.";
+        }
+        else
+        {
+            message = "Invalid confirmation link.";
+        }
+    }
+}
