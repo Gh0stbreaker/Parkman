@@ -1,0 +1,12 @@
+@page "/error"
+@using Microsoft.AspNetCore.WebUtilities
+
+@code {
+    [Parameter] [SupplyParameterFromQuery] public string? message { get; set; }
+}
+
+<div class="container py-5 text-center">
+    <h3 class="text-danger">An error occurred</h3>
+    <p>@(string.IsNullOrWhiteSpace(message) ? "An unexpected error occurred." : message)</p>
+    <a class="btn btn-primary" href="/">Back to Home</a>
+</div>

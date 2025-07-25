@@ -19,7 +19,16 @@
         if (query.TryGetValue("userId", out var userId) && query.TryGetValue("token", out var token))
         {
             var url = $"api/auth/confirm?userId={Uri.EscapeDataString(userId)}&token={Uri.EscapeDataString(token)}";
-            var response = await Http.GetAsync(url);
+            HttpResponseMessage response;
+            try
+            {
+                response = await Http.GetAsync(url);
+            }
+            catch (HttpRequestException)
+            {
+                Navigation.NavigateTo("/error?message=Unable%20to%20reach%20the%20server.");
+                return;
+            }
             message = response.IsSuccessStatusCode ? "Email confirmed." : "Confirmation failed.";
         }
         else

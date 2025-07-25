@@ -70,6 +70,7 @@
     private bool success;
 
     [Inject] private HttpClient Http { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
 
     private void AddSpot()
     {
@@ -80,7 +81,18 @@
     {
         isSubmitting = true;
         success = false;
-        var response = await Http.PostAsJsonAsync("api/admin/parking/lots", lot);
+        HttpResponseMessage response;
+        try
+        {
+            response = await Http.PostAsJsonAsync("api/admin/parking/lots", lot);
+        }
+        catch (HttpRequestException)
+        {
+            Navigation.NavigateTo("/error?message=Unable%20to%20reach%20the%20server.");
+            isSubmitting = false;
+            return;
+        }
+
         if (response.IsSuccessStatusCode)
         {
             success = true;

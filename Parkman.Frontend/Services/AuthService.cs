@@ -18,7 +18,16 @@ public class AuthService
 
     public async Task<(bool Success, string? Error)> Login(string email, string password)
     {
-        var response = await _http.PostAsJsonAsync("api/auth/login", new { Email = email, Password = password });
+        HttpResponseMessage response;
+        try
+        {
+            response = await _http.PostAsJsonAsync("api/auth/login", new { Email = email, Password = password });
+        }
+        catch (HttpRequestException)
+        {
+            return (false, "Unable to reach the server.");
+        }
+
         if (response.IsSuccessStatusCode)
         {
             _authStateProvider.NotifyAuthenticationStateChanged();
@@ -48,10 +57,17 @@ public class AuthService
 
     public async Task Logout()
     {
-        var response = await _http.PostAsync("api/auth/logout", null);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            _authStateProvider.NotifyAuthenticationStateChanged();
+            var response = await _http.PostAsync("api/auth/logout", null);
+            if (response.IsSuccessStatusCode)
+            {
+                _authStateProvider.NotifyAuthenticationStateChanged();
+            }
+        }
+        catch (HttpRequestException)
+        {
+            // ignore when server is unreachable
         }
     }
 }
