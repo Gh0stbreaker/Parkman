@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Parkman.Infrastructure.Services;
 using Parkman.Shared.Models;
 using Parkman.Domain.Entities;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Linq;
 
 namespace Parkman.Controllers;
 
@@ -16,19 +21,22 @@ public class AuthController : ControllerBase
     private readonly IUserVehicleRegistrationService _vehicleRegistrationService;
     private readonly IUserCompanyRegistrationService _companyRegistrationService;
     private readonly IEmailSender _emailSender;
+    private readonly IConfiguration _configuration;
 
     public AuthController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IUserVehicleRegistrationService vehicleRegistrationService,
         IUserCompanyRegistrationService companyRegistrationService,
-        IEmailSender emailSender)
+        IEmailSender emailSender,
+        IConfiguration configuration)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _vehicleRegistrationService = vehicleRegistrationService;
         _companyRegistrationService = companyRegistrationService;
         _emailSender = emailSender;
+        _configuration = configuration;
     }
 
     [HttpPost("register")]
@@ -137,10 +145,38 @@ public class AuthController : ControllerBase
             return Unauthorized(new ProblemDetails { Title = "Invalid email or password." });
         }
 
-        var result = await _signInManager.PasswordSignInAsync(user.UserName!, request.Password, false, lockoutOnFailure: true);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
 
         if (result.Succeeded)
         {
+            var roles = await _userManager.GetRolesAsync(user);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName ?? user.Email ?? string.Empty)
+            };
+            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var jwt = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(30),
+                signingCredentials: creds);
+
+            var tokenValue = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            Response.Cookies.Append("access_token", tokenValue, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddMinutes(30)
+            });
+
             return Ok();
         }
 
@@ -159,11 +195,11 @@ public class AuthController : ControllerBase
         return Unauthorized(new ProblemDetails { Title = "Invalid email or password." });
     }
 
-    [Authorize]
-    [HttpPost("logout")]
-    public async Task<IActionResult> Logout()
+[Authorize]
+[HttpPost("logout")]
+    public IActionResult Logout()
     {
-        await _signInManager.SignOutAsync();
+        Response.Cookies.Delete("access_token");
         return Ok();
     }
 
