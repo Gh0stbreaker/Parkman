@@ -26,6 +26,8 @@ builder.Services
         options.Lockout.AllowedForNewUsers = true;
         options.User.RequireUniqueEmail = true;
 
+        options.SignIn.RequireConfirmedEmail = true;
+
         options.Password.RequireDigit = true;
         options.Password.RequiredLength = 8;
         options.Password.RequireUppercase = true;

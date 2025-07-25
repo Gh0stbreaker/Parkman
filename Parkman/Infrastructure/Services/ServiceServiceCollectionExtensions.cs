@@ -17,6 +17,7 @@ public static class ServiceServiceCollectionExtensions
         services.AddScoped<Entities.ICompanyReservationService, Entities.CompanyReservationService>();
         services.AddScoped<IUserVehicleRegistrationService, UserVehicleRegistrationService>();
         services.AddScoped<IUserCompanyRegistrationService, UserCompanyRegistrationService>();
+        services.AddTransient<IEmailSender, LoggingEmailSender>();
         return services;
     }
 }
