@@ -58,18 +58,32 @@
     private List<ReservationDto>? reservations;
 
     [Inject] private HttpClient Http { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
-        profile = await Http.GetFromJsonAsync<UserProfileDto>("api/user/profile");
-        reservations = await Http.GetFromJsonAsync<List<ReservationDto>>("api/reservations");
+        try
+        {
+            profile = await Http.GetFromJsonAsync<UserProfileDto>("api/user/profile");
+            reservations = await Http.GetFromJsonAsync<List<ReservationDto>>("api/reservations");
+        }
+        catch (HttpRequestException)
+        {
+            Navigation.NavigateTo("/error?message=Unable%20to%20reach%20the%20server.");
+        }
     }
 
     private async Task CreateReservation()
     {
-        // Placeholder call
-        await Http.PostAsync("api/reservations", null);
-        reservations = await Http.GetFromJsonAsync<List<ReservationDto>>("api/reservations");
+        try
+        {
+            await Http.PostAsync("api/reservations", null);
+            reservations = await Http.GetFromJsonAsync<List<ReservationDto>>("api/reservations");
+        }
+        catch (HttpRequestException)
+        {
+            Navigation.NavigateTo("/error?message=Unable%20to%20reach%20the%20server.");
+        }
     }
 
 }

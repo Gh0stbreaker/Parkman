@@ -77,6 +77,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler("/error");
+app.UseStatusCodePages();
+
 app.UseHttpsRedirection();
 
 app.UseCors();

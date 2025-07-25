@@ -80,6 +80,7 @@
     [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
     [Inject] private AuthService Auth { get; set; } = default!;
     [Inject] private HttpClient Http { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
 
     private bool isLoggedIn;
     private ProfileDto? profile;
@@ -121,8 +122,9 @@
         {
             profile = await Http.GetFromJsonAsync<ProfileDto>("api/user/profile");
         }
-        catch
+        catch (HttpRequestException)
         {
+            Navigation.NavigateTo("/error?message=Unable%20to%20reach%20the%20server.");
             profile = null;
         }
     }

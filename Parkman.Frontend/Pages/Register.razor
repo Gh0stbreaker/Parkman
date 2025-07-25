@@ -396,6 +396,7 @@
     private readonly VehiclePropulsionType[] VehiclePropulsionTypes = Enum.GetValues<VehiclePropulsionType>();
 
     [Inject] private HttpClient Http { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
 
     protected override void OnInitialized()
     {
@@ -434,7 +435,17 @@
             }
         }
 
-        var response = await Http.PostAsJsonAsync("api/auth/register", _model);
+        HttpResponseMessage response;
+        try
+        {
+            response = await Http.PostAsJsonAsync("api/auth/register", _model);
+        }
+        catch (HttpRequestException)
+        {
+            Navigation.NavigateTo("/error?message=Unable%20to%20reach%20the%20server.");
+            isSubmitting = false;
+            return;
+        }
         var error = await response.ApplyValidationErrorsAsync(_userEditContext, _userMessageStore);
 
         if (error is null)
@@ -455,7 +466,17 @@
         isSubmitting = true;
         successMessage = null;
 
-        var response = await Http.PostAsJsonAsync("api/auth/register/company", _companyModel);
+        HttpResponseMessage response;
+        try
+        {
+            response = await Http.PostAsJsonAsync("api/auth/register/company", _companyModel);
+        }
+        catch (HttpRequestException)
+        {
+            Navigation.NavigateTo("/error?message=Unable%20to%20reach%20the%20server.");
+            isSubmitting = false;
+            return;
+        }
         var error = await response.ApplyValidationErrorsAsync(_companyEditContext, _companyMessageStore);
 
         if (error is null)
