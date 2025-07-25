@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Parkman.Shared.Enums;
 
-namespace Parkman.Shared.Entities;
+namespace Parkman.Domain.Entities;
 
 public class ParkingSpot
 {

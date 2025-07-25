@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
-using Parkman.Shared.Entities;
+using Parkman.Domain.Entities;
 
 namespace Parkman.Infrastructure;
 

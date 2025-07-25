@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
-using Parkman.Shared.Entities;
 using Parkman.Infrastructure;
 using Parkman.Infrastructure.Repositories;
 using Parkman.Infrastructure.Services;
 using Serilog;
+using Parkman.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, services, configuration) =>

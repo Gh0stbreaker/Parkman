@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Parkman.Shared.Entities;
 using Parkman.Infrastructure;
 using Parkman.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
+using Parkman.Domain.Entities;
 
 namespace Parkman.Tests.Infrastructure;
 

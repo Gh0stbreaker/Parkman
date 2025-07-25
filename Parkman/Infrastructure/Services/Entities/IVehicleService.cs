@@ -1,6 +1,6 @@
-using Parkman.Shared.Entities;
 using System.Threading.Tasks;
 using Parkman.Infrastructure.Repositories.Entities;
+using Parkman.Domain.Entities;
 
 namespace Parkman.Infrastructure.Services.Entities;
 

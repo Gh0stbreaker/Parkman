@@ -1,6 +1,6 @@
 using System;
 
-namespace Parkman.Shared.Entities;
+namespace Parkman.Domain.Entities;
 
 public class CompanyProfile
 {

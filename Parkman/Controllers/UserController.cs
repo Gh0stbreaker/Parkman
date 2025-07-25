@@ -7,6 +7,7 @@ using Parkman.Shared.Entities;
 using Parkman.Shared.Enums;
 using Parkman.Infrastructure.Repositories.Entities;
 using Parkman.Shared.Models;
+using Parkman.Domain.Entities;
 
 namespace Parkman.Controllers;
 

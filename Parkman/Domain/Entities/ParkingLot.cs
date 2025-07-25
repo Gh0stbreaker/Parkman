@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Parkman.Shared.Entities;
+namespace Parkman.Domain.Entities;
 
 public class ParkingLot
 {

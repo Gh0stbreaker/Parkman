@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using Parkman.Shared.Entities;
+using Parkman.Domain.Entities;
 
 namespace Parkman.Infrastructure.Repositories.Entities;
 

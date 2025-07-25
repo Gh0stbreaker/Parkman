@@ -1,4 +1,4 @@
-using Parkman.Shared.Entities;
+using Parkman.Domain.Entities;
 using System.Threading.Tasks;
 
 namespace Parkman.Infrastructure.Repositories.Entities;

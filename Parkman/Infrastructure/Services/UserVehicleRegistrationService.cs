@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
-using Parkman.Shared.Entities;
 using Parkman.Shared.Enums;
 using Parkman.Infrastructure.Repositories.Entities;
+using Parkman.Domain.Entities;
 
 namespace Parkman.Infrastructure.Services;
 
