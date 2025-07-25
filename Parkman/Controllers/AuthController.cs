@@ -146,7 +146,7 @@ public class AuthController : ControllerBase
 
         if (result.IsLockedOut)
         {
-            return Forbid(new ProblemDetails { Title = "Account is locked." });
+            return StatusCode(StatusCodes.Status403Forbidden, new ProblemDetails { Title = "Account is locked." });
         }
 
         if (result.IsNotAllowed)
