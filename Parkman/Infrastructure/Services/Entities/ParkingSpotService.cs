@@ -5,5 +5,15 @@ namespace Parkman.Infrastructure.Services.Entities;
 
 public class ParkingSpotService : GenericService<ParkingSpot>, IParkingSpotService
 {
-    public ParkingSpotService(IParkingSpotRepository repository) : base(repository) { }
+    private readonly IParkingSpotRepository _repository;
+
+    public ParkingSpotService(IParkingSpotRepository repository) : base(repository)
+    {
+        _repository = repository;
+    }
+
+    public Task<IReadOnlyList<ParkingSpot>> ListAvailableAsync(DateTime startTime, DateTime endTime)
+    {
+        return _repository.ListAvailableAsync(startTime, endTime);
+    }
 }
