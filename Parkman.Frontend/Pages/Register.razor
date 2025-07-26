@@ -1,30 +1,27 @@
 @page "/register"
-@using System.ComponentModel.DataAnnotations
-@using System.Net.Http.Json
 @using Blazorise
 @using Microsoft.AspNetCore.Components.Forms
-@using Parkman.Shared.Enums
-@using Parkman.Shared.Models
+@inject Parkman.Frontend.ViewModels.RegisterViewModel VM
 
 <div class="container py-4 position-relative">
     <h3 class="text-center mb-4 h4">Create an account</h3>
 
     <ul class="nav nav-pills justify-content-center mb-4">
         <li class="nav-item">
-            <button type="button" class="nav-link @(registerAsCompany ? string.Empty : "active")" @onclick="() => registerAsCompany = false">
+            <button type="button" class="nav-link @(VM.RegisterAsCompany ? string.Empty : "active")" @onclick="() => VM.RegisterAsCompany = false">
                 <i class="bi bi-person-fill me-1"></i>Person
             </button>
         </li>
         <li class="nav-item">
-            <button type="button" class="nav-link @(registerAsCompany ? "active" : string.Empty)" @onclick="() => registerAsCompany = true">
+            <button type="button" class="nav-link @(VM.RegisterAsCompany ? "active" : string.Empty)" @onclick="() => VM.RegisterAsCompany = true">
                 <i class="bi bi-building me-1"></i>Company
             </button>
         </li>
     </ul>
 
     <div class="tab-content">
-        <div class="tab-pane fade @(registerAsCompany ? string.Empty : "show active")">
-            <EditForm EditContext="_userEditContext" OnValidSubmit="RegisterUser" class="card p-4 mx-auto" style="max-width: 768px;">
+        <div class="tab-pane fade @(VM.RegisterAsCompany ? string.Empty : "show active")">
+            <EditForm EditContext="VM.UserEditContext" OnValidSubmit="VM.RegisterUserAsync" class="card p-4 mx-auto" style="max-width: 768px;">
                 <DataAnnotationsValidator />
                 <Forms.ValidationSummary />
 
@@ -35,8 +32,8 @@
                             <i class="bi bi-envelope me-1"></i>
                             Email
                         </label>
-                        <InputText @bind-Value="_model.Email" class="form-control" />
-                        <ValidationMessage For="@(() => _model.Email)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.UserModel.Email" class="form-control" />
+                        <ValidationMessage For="@(() => VM.UserModel.Email)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
@@ -44,18 +41,18 @@
                             Password
                         </label>
                         <div class="input-group">
-                            <InputText @bind-Value="_model.Password" type="@(showPassword ? "text" : "password")" class="form-control" />
-                            <button type="button" class="btn btn-outline-secondary" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+                            <InputText @bind-Value="VM.UserModel.Password" type="@(VM.ShowPassword ? "text" : "password")" class="form-control" />
+                            <button type="button" class="btn btn-outline-secondary" @onclick="() => VM.ShowPassword = !VM.ShowPassword">@(VM.ShowPassword ? "Hide" : "Show")</button>
                         </div>
-                        <ValidationMessage For="@(() => _model.Password)" class="text-danger small mt-1" />
+                        <ValidationMessage For="@(() => VM.UserModel.Password)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-lock-fill me-1"></i>
                             Confirm Password
                         </label>
-                        <InputText @bind-Value="_model.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="form-control" />
-                        <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.UserModel.ConfirmPassword" type="@(VM.ShowPassword ? "text" : "password")" class="form-control" />
+                        <ValidationMessage For="@(() => VM.UserModel.ConfirmPassword)" class="text-danger small mt-1" />
                     </div>
                 </div>
 
@@ -66,52 +63,52 @@
                             <i class="bi bi-person me-1"></i>
                             First Name
                         </label>
-                        <InputText @bind-Value="_model.FirstName" class="form-control" />
-                        <ValidationMessage For="@(() => _model.FirstName)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.UserModel.FirstName" class="form-control" />
+                        <ValidationMessage For="@(() => VM.UserModel.FirstName)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-person me-1"></i>
                             Last Name
                         </label>
-                        <InputText @bind-Value="_model.LastName" class="form-control" />
-                        <ValidationMessage For="@(() => _model.LastName)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.UserModel.LastName" class="form-control" />
+                        <ValidationMessage For="@(() => VM.UserModel.LastName)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-calendar me-1"></i>
                             Date of Birth
                         </label>
-                        <InputDate @bind-Value="_model.DateOfBirth" class="form-control" />
-                        <ValidationMessage For="@(() => _model.DateOfBirth)" class="text-danger small mt-1" />
+                        <InputDate @bind-Value="VM.UserModel.DateOfBirth" class="form-control" />
+                        <ValidationMessage For="@(() => VM.UserModel.DateOfBirth)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-telephone me-1"></i>
                             Phone Number
                         </label>
-                        <InputText @bind-Value="_model.PhoneNumber" class="form-control" />
-                        <ValidationMessage For="@(() => _model.PhoneNumber)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.UserModel.PhoneNumber" class="form-control" />
+                        <ValidationMessage For="@(() => VM.UserModel.PhoneNumber)" class="text-danger small mt-1" />
                     </div>
                     <div class="span-2">
                         <label class="form-label">
                             <i class="bi bi-geo-alt me-1"></i>
                             Address
                         </label>
-                        <InputText @bind-Value="_model.Address" class="form-control" />
-                        <ValidationMessage For="@(() => _model.Address)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.UserModel.Address" class="form-control" />
+                        <ValidationMessage For="@(() => VM.UserModel.Address)" class="text-danger small mt-1" />
                     </div>
                 </div>
 
                 <h5 class="mb-3">Vehicle Information</h5>
                 <ul class="nav nav-pills justify-content-center mb-3">
                     <li class="nav-item">
-                        <button type="button" class="nav-link @(registerCompanyVehicle ? string.Empty : "active")" @onclick="() => registerCompanyVehicle = false">
+                        <button type="button" class="nav-link @(VM.RegisterCompanyVehicle ? string.Empty : "active")" @onclick="() => VM.RegisterCompanyVehicle = false">
                             Personal Vehicle
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link @(registerCompanyVehicle ? "active" : string.Empty)" @onclick="() => registerCompanyVehicle = true">
+                        <button type="button" class="nav-link @(VM.RegisterCompanyVehicle ? "active" : string.Empty)" @onclick="() => VM.RegisterCompanyVehicle = true">
                             Company Vehicle
                         </button>
                     </li>
@@ -122,85 +119,85 @@
                             <i class="bi bi-card-text me-1"></i>
                             License Plate
                         </label>
-                        <InputText @bind-Value="_model.LicensePlate" class="form-control" />
-                        <ValidationMessage For="@(() => _model.LicensePlate)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.UserModel.LicensePlate" class="form-control" />
+                        <ValidationMessage For="@(() => VM.UserModel.LicensePlate)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-truck-front me-1"></i>
                             Brand
                         </label>
-                        <InputSelect @bind-Value="_model.Brand" class="form-select">
+                        <InputSelect @bind-Value="VM.UserModel.Brand" class="form-select">
                             <option value="">Select brand</option>
                             @foreach (var brand in VehicleBrands)
                             {
                                 <option value="@brand">@brand</option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="@(() => _model.Brand)" class="text-danger small mt-1" />
+                        <ValidationMessage For="@(() => VM.UserModel.Brand)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-gear me-1"></i>
                             Type
                         </label>
-                        <InputSelect @bind-Value="_model.Type" class="form-select">
+                        <InputSelect @bind-Value="VM.UserModel.Type" class="form-select">
                             <option value="">Select type</option>
                             @foreach (var type in VehicleTypes)
                             {
                                 <option value="@type">@type</option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="@(() => _model.Type)" class="text-danger small mt-1" />
+                        <ValidationMessage For="@(() => VM.UserModel.Type)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-fuel-pump me-1"></i>
                             Propulsion Type
                         </label>
-                        <InputSelect @bind-Value="_model.PropulsionType" class="form-select">
+                        <InputSelect @bind-Value="VM.UserModel.PropulsionType" class="form-select">
                             <option value="">Select propulsion</option>
                             @foreach (var propulsion in VehiclePropulsionTypes)
                             {
                                 <option value="@propulsion">@propulsion</option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="@(() => _model.PropulsionType)" class="text-danger small mt-1" />
+                        <ValidationMessage For="@(() => VM.UserModel.PropulsionType)" class="text-danger small mt-1" />
                     </div>
-                    @if (registerCompanyVehicle)
+                    @if (VM.RegisterCompanyVehicle)
                     {
                         <div>
                             <label class="form-label">
                                 <i class="bi bi-envelope me-1"></i>
                                 Company Email
                             </label>
-                            <InputText @bind-Value="_model.CompanyEmail" class="form-control" />
-                            <ValidationMessage For="@(() => _model.CompanyEmail)" class="text-danger small mt-1" />
+                            <InputText @bind-Value="VM.UserModel.CompanyEmail" class="form-control" />
+                            <ValidationMessage For="@(() => VM.UserModel.CompanyEmail)" class="text-danger small mt-1" />
                         </div>
                         <div>
                             <label class="form-label">
                                 <i class="bi bi-key me-1"></i>
                                 Pairing Password
                             </label>
-                            <InputText @bind-Value="_model.PairingPassword" class="form-control" />
-                            <ValidationMessage For="@(() => _model.PairingPassword)" class="text-danger small mt-1" />
+                            <InputText @bind-Value="VM.UserModel.PairingPassword" class="form-control" />
+                            <ValidationMessage For="@(() => VM.UserModel.PairingPassword)" class="text-danger small mt-1" />
                         </div>
                     }
                 </div>
 
                 <div class="form-check mb-3">
-                    <InputCheckbox @bind-Value="_model.Shareable" class="form-check-input" />
+                    <InputCheckbox @bind-Value="VM.UserModel.Shareable" class="form-check-input" />
                     <label class="form-check-label">Shareable</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100" disabled="@isSubmitting">
-                    @(isSubmitting ? "Registering..." : "Register")
+                <button type="submit" class="btn btn-primary w-100" disabled="@VM.IsSubmitting">
+                    @(VM.IsSubmitting ? "Registering..." : "Register")
                 </button>
             </EditForm>
         </div>
 
-        <div class="tab-pane fade @(registerAsCompany ? "show active" : string.Empty)">
-            <EditForm EditContext="_companyEditContext" OnValidSubmit="RegisterCompany" class="card p-4 mx-auto" style="max-width: 768px;">
+        <div class="tab-pane fade @(VM.RegisterAsCompany ? "show active" : string.Empty)">
+            <EditForm EditContext="VM.CompanyEditContext" OnValidSubmit="VM.RegisterCompanyAsync" class="card p-4 mx-auto" style="max-width: 768px;">
                 <DataAnnotationsValidator />
                 <Forms.ValidationSummary />
 
@@ -211,8 +208,8 @@
                             <i class="bi bi-envelope me-1"></i>
                             Email
                         </label>
-                        <InputText @bind-Value="_companyModel.Email" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.Email)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.Email" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.Email)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
@@ -220,18 +217,18 @@
                             Password
                         </label>
                         <div class="input-group">
-                            <InputText @bind-Value="_companyModel.Password" type="@(showPassword ? "text" : "password")" class="form-control" />
-                            <button type="button" class="btn btn-outline-secondary" @onclick="() => showPassword = !showPassword">@(showPassword ? "Hide" : "Show")</button>
+                            <InputText @bind-Value="VM.CompanyModel.Password" type="@(VM.ShowPassword ? "text" : "password")" class="form-control" />
+                            <button type="button" class="btn btn-outline-secondary" @onclick="() => VM.ShowPassword = !VM.ShowPassword">@(VM.ShowPassword ? "Hide" : "Show")</button>
                         </div>
-                        <ValidationMessage For="@(() => _companyModel.Password)" class="text-danger small mt-1" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.Password)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-lock-fill me-1"></i>
                             Confirm Password
                         </label>
-                        <InputText @bind-Value="_companyModel.ConfirmPassword" type="@(showPassword ? "text" : "password")" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.ConfirmPassword)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.ConfirmPassword" type="@(VM.ShowPassword ? "text" : "password")" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.ConfirmPassword)" class="text-danger small mt-1" />
                     </div>
                 </div>
 
@@ -242,56 +239,56 @@
                             <i class="bi bi-building me-1"></i>
                             Company Name
                         </label>
-                        <InputText @bind-Value="_companyModel.CompanyName" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.CompanyName)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.CompanyName" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.CompanyName)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-123 me-1"></i>
                             IČO
                         </label>
-                        <InputText @bind-Value="_companyModel.Ico" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.Ico)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.Ico" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.Ico)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-123 me-1"></i>
                             DIČ
                         </label>
-                        <InputText @bind-Value="_companyModel.Dic" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.Dic)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.Dic" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.Dic)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-person-lines-fill me-1"></i>
                             Contact Name
                         </label>
-                        <InputText @bind-Value="_companyModel.ContactPersonName" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.ContactPersonName)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.ContactPersonName" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.ContactPersonName)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-envelope me-1"></i>
                             Contact Email
                         </label>
-                        <InputText @bind-Value="_companyModel.ContactEmail" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.ContactEmail)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.ContactEmail" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.ContactEmail)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-telephone me-1"></i>
                             Phone Number
                         </label>
-                        <InputText @bind-Value="_companyModel.PhoneNumber" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.PhoneNumber)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.PhoneNumber" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.PhoneNumber)" class="text-danger small mt-1" />
                     </div>
                     <div class="span-2">
                         <label class="form-label">
                             <i class="bi bi-geo-alt me-1"></i>
                             Billing Address
                         </label>
-                        <InputText @bind-Value="_companyModel.BillingAddress" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.BillingAddress)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.BillingAddress" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.BillingAddress)" class="text-danger small mt-1" />
                     </div>
                 </div>
 
@@ -302,193 +299,78 @@
                             <i class="bi bi-card-text me-1"></i>
                             License Plate
                         </label>
-                        <InputText @bind-Value="_companyModel.LicensePlate" class="form-control" />
-                        <ValidationMessage For="@(() => _companyModel.LicensePlate)" class="text-danger small mt-1" />
+                        <InputText @bind-Value="VM.CompanyModel.LicensePlate" class="form-control" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.LicensePlate)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-truck-front me-1"></i>
                             Brand
                         </label>
-                        <InputSelect @bind-Value="_companyModel.Brand" class="form-select">
+                        <InputSelect @bind-Value="VM.CompanyModel.Brand" class="form-select">
                             <option value="">Select brand</option>
                             @foreach (var brand in VehicleBrands)
                             {
                                 <option value="@brand">@brand</option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="@(() => _companyModel.Brand)" class="text-danger small mt-1" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.Brand)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-gear me-1"></i>
                             Type
                         </label>
-                        <InputSelect @bind-Value="_companyModel.Type" class="form-select">
+                        <InputSelect @bind-Value="VM.CompanyModel.Type" class="form-select">
                             <option value="">Select type</option>
                             @foreach (var type in VehicleTypes)
                             {
                                 <option value="@type">@type</option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="@(() => _companyModel.Type)" class="text-danger small mt-1" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.Type)" class="text-danger small mt-1" />
                     </div>
                     <div>
                         <label class="form-label">
                             <i class="bi bi-fuel-pump me-1"></i>
                             Propulsion Type
                         </label>
-                        <InputSelect @bind-Value="_companyModel.PropulsionType" class="form-select">
+                        <InputSelect @bind-Value="VM.CompanyModel.PropulsionType" class="form-select">
                             <option value="">Select propulsion</option>
                             @foreach (var propulsion in VehiclePropulsionTypes)
                             {
                                 <option value="@propulsion">@propulsion</option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="@(() => _companyModel.PropulsionType)" class="text-danger small mt-1" />
+                        <ValidationMessage For="@(() => VM.CompanyModel.PropulsionType)" class="text-danger small mt-1" />
                     </div>
                 </div>
 
                 <div class="form-check mb-3">
-                    <InputCheckbox @bind-Value="_companyModel.Shareable" class="form-check-input" />
+                    <InputCheckbox @bind-Value="VM.CompanyModel.Shareable" class="form-check-input" />
                     <label class="form-check-label">Shareable</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100" disabled="@isSubmitting">
-                    @(isSubmitting ? "Registering..." : "Register")
+                <button type="submit" class="btn btn-primary w-100" disabled="@VM.IsSubmitting">
+                    @(VM.IsSubmitting ? "Registering..." : "Register")
                 </button>
             </EditForm>
         </div>
     </div>
 
-    <Modal @bind-Visible="showSuccessModal" Animation="Animation.Fade" Backdrop="true">
+    <Modal @bind-Visible="VM.ShowSuccessModal" Animation="Animation.Fade" Backdrop="true">
         <ModalContent>
             <ModalHeader>
                 <ModalTitle>Registration</ModalTitle>
-                <CloseButton @onclick="() => showSuccessModal = false" />
+                <CloseButton @onclick="() => VM.ShowSuccessModal = false" />
             </ModalHeader>
             <ModalBody>
-                @successMessage
+                @VM.SuccessMessage
             </ModalBody>
             <ModalFooter>
-                <Button Color="Color.Primary" @onclick="() => showSuccessModal = false">OK</Button>
+                <Button Color="Color.Primary" @onclick="() => VM.ShowSuccessModal = false">OK</Button>
             </ModalFooter>
         </ModalContent>
     </Modal>
 </div>
 
-@code {
-    private RegisterWithVehicleRequest _model = new();
-    private RegisterCompanyRequest _companyModel = new();
-    private EditContext _userEditContext = default!;
-    private ValidationMessageStore _userMessageStore = default!;
-    private EditContext _companyEditContext = default!;
-    private ValidationMessageStore _companyMessageStore = default!;
-    private bool registerAsCompany;
-    private bool registerCompanyVehicle;
-    private bool showPassword;
-    private bool isSubmitting;
-    private string? successMessage;
-    private bool showSuccessModal;
-
-    private readonly VehicleBrand[] VehicleBrands = Enum.GetValues<VehicleBrand>();
-    private readonly VehicleType[] VehicleTypes = Enum.GetValues<VehicleType>();
-    private readonly VehiclePropulsionType[] VehiclePropulsionTypes = Enum.GetValues<VehiclePropulsionType>();
-
-    [Inject] private HttpClient Http { get; set; } = default!;
-    [Inject] private NavigationManager Navigation { get; set; } = default!;
-
-    protected override void OnInitialized()
-    {
-        _userEditContext = new EditContext(_model);
-        _userMessageStore = new ValidationMessageStore(_userEditContext);
-        _companyEditContext = new EditContext(_companyModel);
-        _companyMessageStore = new ValidationMessageStore(_companyEditContext);
-    }
-
-    private async Task RegisterUser()
-    {
-        isSubmitting = true;
-        successMessage = null;
-        _userMessageStore.Clear();
-
-        if (registerCompanyVehicle)
-        {
-            bool validationFailed = false;
-            if (string.IsNullOrWhiteSpace(_model.CompanyEmail))
-            {
-                _userMessageStore.Add(new FieldIdentifier(_model, nameof(_model.CompanyEmail)), new[] { "Company email is required." });
-                validationFailed = true;
-            }
-
-            if (string.IsNullOrWhiteSpace(_model.PairingPassword))
-            {
-                _userMessageStore.Add(new FieldIdentifier(_model, nameof(_model.PairingPassword)), new[] { "Pairing password is required." });
-                validationFailed = true;
-            }
-
-            if (validationFailed)
-            {
-                _userEditContext.NotifyValidationStateChanged();
-                isSubmitting = false;
-                return;
-            }
-        }
-
-        HttpResponseMessage response;
-        try
-        {
-            response = await Http.PostAsJsonAsync("api/auth/register", _model);
-        }
-        catch (HttpRequestException)
-        {
-            Navigation.NavigateTo("/error?message=Unable%20to%20reach%20the%20server.");
-            isSubmitting = false;
-            return;
-        }
-        var error = await response.ApplyValidationErrorsAsync(_userEditContext, _userMessageStore);
-
-        if (error is null)
-        {
-            successMessage = "Registration successful!";
-            _model = new RegisterWithVehicleRequest();
-            _userEditContext = new EditContext(_model);
-            _userMessageStore = new ValidationMessageStore(_userEditContext);
-            registerCompanyVehicle = false;
-            showSuccessModal = true;
-        }
-
-        isSubmitting = false;
-    }
-
-    private async Task RegisterCompany()
-    {
-        isSubmitting = true;
-        successMessage = null;
-
-        HttpResponseMessage response;
-        try
-        {
-            response = await Http.PostAsJsonAsync("api/auth/register/company", _companyModel);
-        }
-        catch (HttpRequestException)
-        {
-            Navigation.NavigateTo("/error?message=Unable%20to%20reach%20the%20server.");
-            isSubmitting = false;
-            return;
-        }
-        var error = await response.ApplyValidationErrorsAsync(_companyEditContext, _companyMessageStore);
-
-        if (error is null)
-        {
-            successMessage = "Registration successful!";
-            _companyModel = new RegisterCompanyRequest();
-            _companyEditContext = new EditContext(_companyModel);
-            _companyMessageStore = new ValidationMessageStore(_companyEditContext);
-            showSuccessModal = true;
-        }
-
-        isSubmitting = false;
-    }
-
-}
