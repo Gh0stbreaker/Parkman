@@ -30,6 +30,13 @@ public class Program
         builder.Services.AddScoped<ApiAuthenticationStateProvider>();
         builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<ApiAuthenticationStateProvider>());
         builder.Services.AddScoped<AuthService>();
+        builder.Services.AddScoped<Parkman.Frontend.ViewModels.LoginViewModel>();
+        builder.Services.AddScoped<Parkman.Frontend.ViewModels.DashboardViewModel>();
+        builder.Services.AddScoped<Parkman.Frontend.ViewModels.ManageParkingViewModel>();
+        builder.Services.AddScoped<Parkman.Frontend.ViewModels.ConfirmEmailViewModel>();
+        builder.Services.AddScoped<Parkman.Frontend.ViewModels.ForgotPasswordViewModel>();
+        builder.Services.AddScoped<Parkman.Frontend.ViewModels.ResetPasswordViewModel>();
+        builder.Services.AddScoped<Parkman.Frontend.ViewModels.RegisterViewModel>();
 
         var apiBaseAddress = builder.Configuration["ApiBaseAddress"] ?? builder.HostEnvironment.BaseAddress;
         builder.Services.AddScoped<IncludeCredentialsHandler>();
