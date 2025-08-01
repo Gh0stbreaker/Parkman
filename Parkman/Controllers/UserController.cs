@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Parkman.Shared.Enums;
+using Parkman.Shared.Dtos;
 using Parkman.Infrastructure.Repositories.Entities;
 using Parkman.Shared.Models;
 using Parkman.Domain.Entities;
@@ -54,6 +55,7 @@ public class UserController : ControllerBase
         VehicleBrand? brand = null;
         VehicleType? vehicleType = null;
         VehiclePropulsionType? propulsionType = null;
+        var roles = await _userManager.GetRolesAsync(user);
 
         if (user.PersonProfile != null)
         {
@@ -79,7 +81,19 @@ public class UserController : ControllerBase
             }
         }
 
-        return Ok(new { Email = email, FirstName = firstName, LastName = lastName, LicensePlate = licensePlate, Brand = brand, VehicleType = vehicleType, PropulsionType = propulsionType });
+        var dto = new UserProfileDto
+        {
+            Email = email,
+            FirstName = firstName,
+            LastName = lastName,
+            LicensePlate = licensePlate,
+            Brand = brand?.ToString(),
+            VehicleType = vehicleType?.ToString(),
+            PropulsionType = propulsionType?.ToString(),
+            Roles = roles.ToList()
+        };
+
+        return Ok(dto);
     }
 
     [HttpPut("profile")]

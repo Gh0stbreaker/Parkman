@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Parkman.Shared.Dtos;
 
 public class UserProfileDto
@@ -9,4 +11,5 @@ public class UserProfileDto
     public string? Brand { get; set; }
     public string? VehicleType { get; set; }
     public string? PropulsionType { get; set; }
+    public List<string> Roles { get; set; } = new();
 }
