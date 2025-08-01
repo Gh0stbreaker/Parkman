@@ -2,6 +2,8 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Parkman.Frontend.Services;
@@ -20,7 +22,12 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         try
         {
             var profile = await _http.GetFromJsonAsync<ProfileDto>("api/user/profile");
-            var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, profile.Email) }, "serverAuth");
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, profile.Email) };
+            if (profile.Roles != null)
+            {
+                claims.AddRange(profile.Roles.Select(r => new Claim(ClaimTypes.Role, r)));
+            }
+            var identity = new ClaimsIdentity(claims, "serverAuth");
             return new AuthenticationState(new ClaimsPrincipal(identity));
         }
         catch
@@ -40,5 +47,6 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         public string? Brand { get; set; }
         public string? VehicleType { get; set; }
         public string? PropulsionType { get; set; }
+        public List<string>? Roles { get; set; }
     }
 }
